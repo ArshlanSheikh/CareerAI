@@ -1,0 +1,207 @@
+.previewPage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  min-height: calc(100vh - 120px);
+  background-color: var(--slate-100);
+  margin: -1.5rem -1.5rem 0;
+  padding: 1.5rem;
+}
+
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: 0.75rem var(--spacing-lg);
+  background-color: #ffffff;
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+  position: sticky;
+  top: 1rem;
+  z-index: 40;
+}
+
+.barLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.backBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: var(--radius-md);
+  color: var(--slate-700);
+  background-color: var(--slate-100);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.backBtn:hover {
+  background-color: var(--slate-200);
+  color: var(--slate-900);
+}
+
+.titleArea {
+  display: flex;
+  flex-direction: column;
+}
+
+.resumeTitle {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--slate-900);
+  line-height: 1.2;
+}
+
+.resumeRole {
+  font-size: 0.75rem;
+  color: var(--slate-500);
+}
+
+.barCenter {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  background-color: var(--slate-100);
+  padding: 0.25rem;
+  border-radius: var(--radius-lg);
+}
+
+.templateTab {
+  padding: 0.4rem 0.85rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--slate-600);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.templateTab:hover {
+  color: var(--slate-900);
+}
+
+.activeTemplate {
+  background-color: #ffffff;
+  color: var(--primary-700);
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+}
+
+.barRight {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.zoomControls {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background-color: var(--slate-100);
+  border-radius: var(--radius-md);
+  padding: 2px;
+}
+
+.zoomBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  color: var(--slate-600);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.zoomBtn:hover {
+  background-color: var(--slate-200);
+  color: var(--slate-900);
+}
+
+.zoomValue {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--slate-700);
+  padding: 0 0.4rem;
+}
+
+/* Paper Container */
+.paperViewport {
+  display: flex;
+  justify-content: center;
+  padding: var(--spacing-lg) 0;
+  overflow-x: auto;
+}
+
+.paperSheet {
+  width: 816px; /* Standard 8.5in at 96dpi */
+  min-height: 1056px; /* Standard 11in at 96dpi */
+  background-color: #ffffff;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.06);
+  border-radius: 2px;
+  position: relative;
+  box-sizing: border-box;
+  transform-origin: top center;
+  transition: transform var(--transition-fast);
+}
+
+.pageBreakIndicator {
+  position: absolute;
+  top: 1056px;
+  left: -20px;
+  right: -20px;
+  border-top: 2px dashed #cbd5e1;
+  pointer-events: none;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 1rem;
+}
+
+.pageBreakLabel {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #94a3b8;
+  background-color: #f1f5f9;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  transform: translateY(-50%);
+}
+
+/* Print Styles */
+@media print {
+  body {
+    background-color: #ffffff !important;
+  }
+
+  .previewPage {
+    background-color: #ffffff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .topBar, .pageBreakIndicator {
+    display: none !important;
+  }
+
+  .paperViewport {
+    padding: 0 !important;
+  }
+
+  .paperSheet {
+    width: 100% !important;
+    min-height: auto !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+}
+

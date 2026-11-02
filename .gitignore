@@ -1,0 +1,28 @@
+# Node
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+backend/venv/
+venv/
+ENV/
+env/
+.env
+.env.*
+!.env.example
+backend/.env
+
+# IDE / System
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log
+

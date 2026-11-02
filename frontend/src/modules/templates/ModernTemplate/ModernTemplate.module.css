@@ -1,0 +1,173 @@
+.container {
+  font-family: var(--font-sans);
+  color: #1e293b;
+  line-height: 1.5;
+  background-color: #ffffff;
+  padding: 2.25rem 2.5rem;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.header {
+  border-bottom: 2px solid #4f46e5;
+  padding-bottom: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.name {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.025em;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.role {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #4f46e5;
+  margin-top: 0.25rem;
+}
+
+.contactRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.85rem;
+  font-size: 0.8125rem;
+  color: #64748b;
+  margin-top: 0.5rem;
+}
+
+.contactItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.separator {
+  color: #cbd5e1;
+}
+
+.section {
+  margin-bottom: 1.2rem;
+}
+
+.sectionTitle {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #312e81;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 0.25rem;
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.summaryText {
+  font-size: 0.875rem;
+  color: #334155;
+  margin: 0;
+  line-height: 1.55;
+}
+
+.itemBlock {
+  margin-bottom: 0.75rem;
+}
+
+.itemBlock:last-child {
+  margin-bottom: 0;
+}
+
+.rowBetween {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.primaryTitle {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.dateRange {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.subTitle {
+  font-size: 0.84375rem;
+  font-weight: 500;
+  color: #475569;
+}
+
+.tagline {
+  font-size: 0.8125rem;
+  color: #64748b;
+  margin-top: 0.15rem;
+}
+
+.techStack {
+  font-size: 0.78125rem;
+  color: #4f46e5;
+  font-weight: 500;
+  margin: 0.2rem 0;
+}
+
+.bulletList {
+  margin: 0.35rem 0 0.5rem 1.25rem;
+  padding: 0;
+  list-style-type: disc;
+}
+
+.bulletItem {
+  font-size: 0.84375rem;
+  color: #334155;
+  line-height: 1.5;
+  margin-bottom: 0.2rem;
+}
+
+.skillsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.skillLine {
+  font-size: 0.84375rem;
+  color: #334155;
+}
+
+.skillCategory {
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.skillItems {
+  color: #475569;
+}
+
+.chipsWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.2rem;
+}
+
+.chip {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.15rem 0.5rem;
+  background-color: #f1f5f9;
+  color: #334155;
+  border-radius: 4px;
+}
+

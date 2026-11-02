@@ -1,0 +1,121 @@
+.navContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  background-color: #ffffff;
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-sm);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.navHeader {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--slate-400);
+  border-bottom: 1px solid var(--slate-100);
+  margin-bottom: 0.25rem;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  user-select: none;
+}
+
+.navItem:hover {
+  background-color: var(--slate-50);
+}
+
+.activeItem {
+  background-color: var(--primary-50);
+  color: var(--primary-700);
+}
+
+.activeItem:hover {
+  background-color: var(--primary-50);
+}
+
+.hiddenItem {
+  opacity: 0.55;
+  background-color: var(--slate-50);
+}
+
+.itemMain {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex: 1;
+}
+
+.itemLabel {
+  font-size: 0.84375rem;
+  font-weight: 500;
+  color: var(--slate-800);
+  white-space: nowrap;
+}
+
+.activeLabel {
+  color: var(--primary-700);
+  font-weight: 600;
+}
+
+.countBadge {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  padding: 0.15rem 0.4rem;
+  border-radius: var(--radius-full);
+  background-color: var(--slate-100);
+  color: var(--slate-600);
+}
+
+.activeBadge {
+  background-color: var(--primary-200);
+  color: var(--primary-800);
+}
+
+.itemControls {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.controlBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-sm);
+  color: var(--slate-400);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.controlBtn:hover:not(:disabled) {
+  background-color: var(--slate-200);
+  color: var(--slate-800);
+}
+
+.controlBtn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+.visibleIcon {
+  color: var(--slate-600);
+}
+
+.hiddenIcon {
+  color: var(--slate-400);
+}
+

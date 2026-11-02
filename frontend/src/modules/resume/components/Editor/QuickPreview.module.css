@@ -1,0 +1,172 @@
+.previewWrapper {
+  background-color: var(--slate-100);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: calc(100vh - 140px);
+  position: sticky;
+  top: 80px;
+}
+
+.previewHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--slate-200);
+  margin-bottom: var(--spacing-sm);
+}
+
+.previewTitle {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--slate-700);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.paperSheet {
+  background-color: #ffffff;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  padding: 1.5rem;
+  flex: 1;
+  overflow-y: auto;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--slate-900);
+}
+
+/* Modern Template Styles */
+.modernHeader {
+  border-bottom: 2px solid var(--primary-600);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.modernName {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--slate-900);
+  letter-spacing: -0.01em;
+}
+
+.modernRole {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--primary-600);
+}
+
+.modernContact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.6875rem;
+  color: var(--slate-500);
+  margin-top: 0.35rem;
+}
+
+.sectionBlock {
+  margin-bottom: 0.85rem;
+}
+
+.modernSectionTitle {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--primary-800);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--slate-200);
+  padding-bottom: 0.2rem;
+  margin-bottom: 0.4rem;
+}
+
+/* ATS Template Styles */
+.atsHeader {
+  text-align: center;
+  border-bottom: 1px solid var(--slate-400);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.atsName {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #000000;
+}
+
+.atsSectionTitle {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #000000;
+  text-transform: uppercase;
+  border-bottom: 1px solid #000000;
+  padding-bottom: 2px;
+  margin-bottom: 0.35rem;
+}
+
+/* Traditional Template Styles */
+.tradHeader {
+  text-align: center;
+  margin-bottom: 0.75rem;
+  font-family: var(--font-serif);
+}
+
+.tradName {
+  font-size: 1.35rem;
+  font-weight: 700;
+  font-family: var(--font-serif);
+  color: var(--slate-900);
+}
+
+.tradSectionTitle {
+  font-family: var(--font-serif);
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--slate-900);
+  border-bottom: 1px double var(--slate-400);
+  padding-bottom: 2px;
+  margin-bottom: 0.4rem;
+}
+
+.itemHeading {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  color: var(--slate-900);
+}
+
+.subHeading {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--slate-600);
+  font-style: italic;
+  margin-bottom: 0.2rem;
+}
+
+.bulletList {
+  margin: 0.2rem 0 0.4rem 1.1rem;
+  padding: 0;
+  font-size: 0.75rem;
+  color: var(--slate-700);
+}
+
+.bulletItem {
+  margin-bottom: 0.15rem;
+}
+
+.skillLine {
+  font-size: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.skillCategory {
+  font-weight: 600;
+  color: var(--slate-800);
+}
+

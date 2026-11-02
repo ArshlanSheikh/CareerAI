@@ -1,0 +1,47 @@
+.fullPageContainer {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+}
+
+.inlineContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-lg);
+  color: var(--slate-600);
+}
+
+.spinner {
+  color: var(--primary-600);
+  animation: spin 1s linear infinite;
+}
+
+.message {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--slate-700);
+}
+
+.inlineMessage {
+  font-size: 0.875rem;
+  color: var(--slate-600);
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+

@@ -1,0 +1,136 @@
+.navbar {
+  background-color: #ffffff;
+  border-bottom: 1px solid var(--slate-200);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  height: 64px;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--spacing-lg);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  text-decoration: none;
+}
+
+.logoIcon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--primary-600), var(--primary-800));
+  color: #ffffff;
+}
+
+.sparkleIcon {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  color: #fbbf24;
+}
+
+.brandName {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--slate-900);
+  letter-spacing: -0.02em;
+}
+
+.brandHighlight {
+  color: var(--primary-600);
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: 0.5rem 0.85rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--slate-600);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.navLink:hover {
+  color: var(--slate-900);
+  background-color: var(--slate-100);
+}
+
+.activeLink {
+  color: var(--primary-600);
+  background-color: var(--primary-50);
+}
+
+.activeLink:hover {
+  color: var(--primary-700);
+  background-color: var(--primary-50);
+}
+
+.userActions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.userBadge {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: 0.25rem 0.5rem 0.25rem 0.75rem;
+  background-color: var(--slate-100);
+  border-radius: var(--radius-full);
+}
+
+.userEmail {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--slate-700);
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logoutBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  color: var(--slate-500);
+  transition: all var(--transition-fast);
+}
+
+.logoutBtn:hover {
+  background-color: var(--slate-200);
+  color: var(--danger-600);
+}
+
+.authButtons {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+

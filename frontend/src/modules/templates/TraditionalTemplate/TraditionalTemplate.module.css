@@ -1,0 +1,140 @@
+.container {
+  font-family: var(--font-serif);
+  color: #1a1a1a;
+  line-height: 1.5;
+  background-color: #ffffff;
+  padding: 2.25rem 2.5rem;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.header {
+  text-align: center;
+  border-bottom: 2px solid #2b2b2b;
+  padding-bottom: 0.85rem;
+  margin-bottom: 1.25rem;
+}
+
+.name {
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: #111111;
+  letter-spacing: 0.02em;
+  margin: 0;
+  line-height: 1.15;
+}
+
+.role {
+  font-size: 1rem;
+  font-style: italic;
+  color: #444444;
+  margin-top: 0.25rem;
+}
+
+.contactRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem 0.75rem;
+  font-size: 0.8125rem;
+  color: #555555;
+  margin-top: 0.5rem;
+}
+
+.separator {
+  color: #888888;
+}
+
+.section {
+  margin-bottom: 1.25rem;
+}
+
+.sectionTitle {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #1a1a1a;
+  border-bottom: 1px solid #777777;
+  padding-bottom: 0.2rem;
+  margin-bottom: 0.6rem;
+}
+
+.summaryText {
+  font-size: 0.84375rem;
+  color: #2c2c2c;
+  margin: 0;
+  line-height: 1.6;
+  text-align: justify;
+}
+
+.itemBlock {
+  margin-bottom: 0.8rem;
+}
+
+.itemBlock:last-child {
+  margin-bottom: 0;
+}
+
+.rowBetween {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.primaryTitle {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #111111;
+}
+
+.dateRange {
+  font-size: 0.8125rem;
+  font-style: italic;
+  color: #555555;
+}
+
+.subTitle {
+  font-size: 0.84375rem;
+  font-style: italic;
+  color: #333333;
+}
+
+.tagline {
+  font-size: 0.8125rem;
+  color: #444444;
+  margin-top: 0.15rem;
+}
+
+.techStack {
+  font-size: 0.78125rem;
+  font-style: italic;
+  color: #444444;
+  margin: 0.2rem 0;
+}
+
+.bulletList {
+  margin: 0.35rem 0 0.5rem 1.25rem;
+  padding: 0;
+  list-style-type: square;
+}
+
+.bulletItem {
+  font-size: 0.8125rem;
+  color: #222222;
+  line-height: 1.5;
+  margin-bottom: 0.2rem;
+}
+
+.skillLine {
+  font-size: 0.8125rem;
+  color: #222222;
+  margin-bottom: 0.25rem;
+}
+
+.skillCategory {
+  font-weight: 700;
+  color: #111111;
+}
+

@@ -1,0 +1,112 @@
+.authContainer {
+  min-height: 100vh;
+  display: flex;
+  background-color: #ffffff;
+}
+
+.brandSide {
+  flex: 1;
+  background: linear-gradient(135deg, var(--slate-900) 0%, var(--primary-900) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl);
+  color: #ffffff;
+}
+
+.brandContent {
+  max-width: 460px;
+}
+
+.brandHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.logoIcon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-lg);
+  background-color: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+}
+
+.sparkleIcon {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  color: #fbbf24;
+}
+
+.brandTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.brandHighlight {
+  color: var(--primary-400);
+}
+
+.brandTagline {
+  font-size: 1.125rem;
+  color: var(--slate-300);
+  line-height: 1.6;
+  margin-bottom: var(--spacing-2xl);
+}
+
+.featureList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.featureItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: 0.9375rem;
+  color: var(--slate-200);
+}
+
+.checkIcon {
+  color: #34d399;
+  flex-shrink: 0;
+}
+
+.formSide {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl);
+  background-color: var(--slate-50);
+}
+
+.formCard {
+  width: 100%;
+  max-width: 440px;
+  background-color: #ffffff;
+  padding: var(--spacing-2xl);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--slate-200);
+  box-shadow: var(--shadow-md);
+}
+
+@media (max-width: 900px) {
+  .authContainer {
+    flex-direction: column;
+  }
+  .brandSide {
+    display: none;
+  }
+}
+
