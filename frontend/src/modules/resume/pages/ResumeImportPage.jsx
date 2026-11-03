@@ -123,9 +123,9 @@ export default function ResumeImportPage() {
         extractedData.parsed_content
       );
 
-      notify.success('Resume created successfully! Opening editor workspace...');
+      notify.success('Resume imported successfully! Launching Analytics Dashboard...');
       setTimeout(() => {
-        navigate(`/resumes/${newResume.id}/edit`);
+        navigate(`/resumes/${newResume.id}/analysis`);
       }, 400);
     } catch (err) {
       notify.error(err.message || 'Failed to create resume from extracted data');

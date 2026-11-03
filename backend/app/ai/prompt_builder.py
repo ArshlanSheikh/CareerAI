@@ -195,22 +195,22 @@ RESUME DATA TO ANALYZE:
 SCORING CRITERIA:
 1. Overall Resume Score (0-100): Composite rating balancing clarity, technical skills, project depth, experience impact, and structural completeness.
 2. ATS Compatibility Score (0-100): Estimation of machine readability, standard headings, parseable formatting, and keyword density. Note: Strictly an estimate.
-3. Content Quality & Readability (0-100): Professional vocabulary, elimination of grammatical weaknesses, sentence length, and active voice.
-4. Section-by-Section Ratings:
-   - Summary: Does it clearly convey the candidate's target role, technical foundations, and career focus in 2-4 tight sentences?
-   - Skills: Are technologies organized logically into standard categories? Are industry-standard tools present?
-   - Education: Are degrees, majors, institutions, and graduation years clear?
-   - Projects: Do projects highlight architecture and individual technical contributions using active verbs? Are bullets specific?
-   - Experience: Are responsibilities framed with deliverables and metrics where available without inventing numbers?
-5. 5 Quality Dimensions (Radar Chart 0-100):
-   - Impact & Action Verbs
-   - Quantification & Metrics
-   - ATS Formatting
-   - Technical Depth
-   - Completeness & Structure
-6. Identify 3 to 5 clear Strengths.
-7. Identify 3 to 6 genuine Weaknesses categorized as 'critical', 'warning', or 'suggestion'.
-8. Provide 3 to 5 Actionable Recommendations with estimated score impact.
+3. Job Readiness Score (0-100): Alignment with industry standards, modern tech stacks, and hiring expectations for the target role.
+4. Content Quality & Readability (0-100): Professional vocabulary, elimination of grammatical weaknesses, sentence length, and active voice.
+5. Structure Completeness Score (0-100): Evaluation of how completely and properly sections are filled.
+6. Section-by-Section Ratings for all 8 sections:
+   - Summary, Skills, Education, Projects, Experience, Internships, Certifications, Additional Information.
+7. Skill Distribution (for Donut Chart):
+   - Categorize all identified skills into: Technical Skills, Tools & Cloud, Domain & Soft Skills.
+8. Keyword Coverage:
+   - Calculate percentage of relevant industry keywords present vs missing for the target role.
+9. ATS Compliance Checklist:
+   - Standard Headings, Single-Column Parsing, Contact Information, Date Formatting, Bullet Point Hierarchy.
+10. 5 Quality Dimensions (Radar Chart 0-100):
+   - Impact & Action Verbs, Quantification & Metrics, ATS Formatting, Technical Depth, Completeness & Structure.
+11. Identify 3 to 5 clear Strengths.
+12. Identify 3 to 6 genuine Weaknesses categorized as 'critical', 'warning', or 'suggestion'.
+13. Provide 3 to 5 Actionable Recommendations with estimated score impact.
 
 CRITICAL INTEGRITY:
 - Base analysis ONLY on the candidate's actual provided data.
@@ -220,13 +220,18 @@ REQUIRED JSON RESPONSE SCHEMA:
 {{
   "overall_score": 78,
   "ats_compatibility_score": 82,
+  "job_readiness_score": 75,
   "content_quality_score": 75,
   "readability_score": 80,
+  "structure_completeness_score": 85,
   "summary_score": 70,
   "skills_score": 85,
   "education_score": 90,
   "projects_score": 74,
   "experience_score": 72,
+  "internships_score": 75,
+  "certifications_score": 80,
+  "additional_score": 75,
   "section_scores": {{
     "summary": {{
       "score": 70,
@@ -253,9 +258,24 @@ REQUIRED JSON RESPONSE SCHEMA:
     }},
     "experience": {{
       "score": 72,
-      "feedback": "Internship experience is valuable; convert passive sentences to strong action verbs.",
+      "feedback": "Experience is valuable; convert passive sentences to strong action verbs.",
       "action_verbs_score": 70,
       "quantification_score": 65
+    }},
+    "internships": {{
+      "score": 75,
+      "feedback": "Internship responsibilities demonstrate practical team contributions.",
+      "count": 1
+    }},
+    "certifications": {{
+      "score": 80,
+      "feedback": "Relevant credentials support continuous learning.",
+      "count": 1
+    }},
+    "additional_info": {{
+      "score": 75,
+      "feedback": "Extracurriculars and languages add personal dimension.",
+      "count": 1
     }}
   }},
   "quality_dimensions": [
@@ -264,6 +284,30 @@ REQUIRED JSON RESPONSE SCHEMA:
     {{ "dimension": "ATS Formatting", "score": 88, "benchmark": 90 }},
     {{ "dimension": "Technical Depth", "score": 80, "benchmark": 80 }},
     {{ "dimension": "Completeness & Structure", "score": 85, "benchmark": 85 }}
+  ],
+  "skill_distribution": {{
+    "technical_count": 8,
+    "tools_count": 4,
+    "soft_skills_count": 3,
+    "distribution": [
+      {{ "name": "Technical Skills", "value": 8, "percentage": 53, "color": "#6366f1" }},
+      {{ "name": "Tools & Cloud", "value": 4, "percentage": 27, "color": "#a855f7" }},
+      {{ "name": "Domain & Soft", "value": 3, "percentage": 20, "color": "#ec4899" }}
+    ]
+  }},
+  "keyword_coverage": {{
+    "matched_keywords_count": 12,
+    "recommended_keywords_count": 5,
+    "coverage_percentage": 71,
+    "matched_keywords": ["Python", "FastAPI", "React", "PostgreSQL"],
+    "missing_critical_keywords": ["Docker", "CI/CD", "AWS", "Unit Testing"]
+  }},
+  "ats_checklist": [
+    {{ "item": "Standard Section Headings", "status": "pass", "note": "Headings conform to ATS parser recognition." }},
+    {{ "item": "Contact Parseability", "status": "pass", "note": "Email and phone numbers are located in top header." }},
+    {{ "item": "Linear Single-Column Layout", "status": "pass", "note": "No complex columns or tables that confuse OCR." }},
+    {{ "item": "Standard Date Formats", "status": "pass", "note": "Consistent month/year chronological formats." }},
+    {{ "item": "Action Verb Density", "status": "warning", "note": "Some project bullets begin with passive wording." }}
   ],
   "strengths": [
     {{
@@ -290,7 +334,7 @@ REQUIRED JSON RESPONSE SCHEMA:
       "estimated_score_boost": 6
     }}
   ],
-  "disclaimer": "ATS compatibility score is an estimation based on layout readability and keyword alignment. It is not a guarantee of passing automated screening or job selection."
+  "disclaimer": "ATS compatibility and Job Readiness scores are estimations based on industry keyword density, format parseability, and structured criteria. They are actionable guidelines and not a factual guarantee of selection."
 }}
 """
         return prompt.strip()

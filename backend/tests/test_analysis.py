@@ -134,6 +134,9 @@ class AnalysisTestCase(unittest.TestCase):
         # Validate core scoring fields
         self.assertIn("overall_score", data)
         self.assertIn("ats_compatibility_score", data)
+        self.assertIn("job_readiness_score", data)
+        self.assertIn("content_quality_score", data)
+        self.assertIn("structure_completeness_score", data)
         self.assertIn("section_scores", data)
         self.assertIn("quality_dimensions", data)
         self.assertIn("strengths", data)
@@ -145,6 +148,8 @@ class AnalysisTestCase(unittest.TestCase):
         self.assertLessEqual(data["overall_score"], 100)
         self.assertGreaterEqual(data["ats_compatibility_score"], 0)
         self.assertLessEqual(data["ats_compatibility_score"], 100)
+        self.assertGreaterEqual(data["job_readiness_score"], 0)
+        self.assertLessEqual(data["job_readiness_score"], 100)
 
         # Check radar chart quality dimensions format
         dims = data["quality_dimensions"]

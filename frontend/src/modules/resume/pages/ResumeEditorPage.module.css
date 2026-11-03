@@ -219,3 +219,364 @@
     padding: var(--space-4);
   }
 }
+
+/* Embedded Resume Analytics Section */
+.analyticsSection {
+  background: #ffffff;
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-card);
+  margin-top: var(--space-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.analyticsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-4);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--slate-100);
+  flex-wrap: wrap;
+}
+
+.analyticsTitleWrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.analyticsIconBadge {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.18) 100%);
+  color: var(--primary-600);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.analyticsTitleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.analyticsTitle {
+  font-size: var(--font-lg);
+  font-weight: 700;
+  color: var(--slate-900);
+  margin: 0;
+}
+
+.analyticsSyncBadge {
+  font-size: var(--font-xs);
+  font-weight: 600;
+  color: var(--primary-700);
+  background: var(--primary-50);
+  border: 1px solid var(--primary-200);
+  padding: 0.15rem 0.55rem;
+  border-radius: var(--radius-full);
+}
+
+.analyticsSubtitle {
+  font-size: var(--font-xs);
+  color: var(--slate-500);
+  margin: 0.2rem 0 0 0;
+}
+
+.analyticsActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* KPI Strip */
+.kpiStrip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+}
+
+.kpiCard {
+  background: var(--slate-50);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  transition: all var(--transition-fast);
+}
+
+.kpiCard:hover {
+  background: #ffffff;
+  border-color: var(--primary-200);
+  box-shadow: var(--shadow-sm);
+}
+
+.kpiTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.kpiLabel {
+  font-size: var(--font-xs);
+  font-weight: 600;
+  color: var(--slate-600);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.kpiIcon {
+  color: var(--slate-400);
+}
+
+.kpiValueRow {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.kpiValue {
+  font-size: var(--font-2xl);
+  font-weight: 800;
+  color: var(--slate-900);
+  line-height: 1;
+}
+
+.kpiUnit {
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--slate-500);
+  margin-left: 1px;
+}
+
+.scorePill {
+  font-size: var(--font-xs);
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-full);
+}
+
+.pillGood {
+  color: var(--success-700);
+  background: var(--success-100);
+}
+
+.pillAvg {
+  color: var(--warning-700);
+  background: var(--warning-100);
+}
+
+.pillLow {
+  color: var(--danger-700);
+  background: var(--danger-100);
+}
+
+.estTag {
+  font-size: var(--font-xs);
+  color: var(--slate-400);
+  font-weight: 500;
+}
+
+/* Weaknesses Area */
+.recommendationsArea {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.recHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.recHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-sm);
+  font-weight: 700;
+  color: var(--slate-800);
+  margin: 0;
+}
+
+.recSubtext {
+  font-size: var(--font-xs);
+  color: var(--slate-500);
+}
+
+.weaknessGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--space-3);
+}
+
+.weaknessCard {
+  background: #ffffff;
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  transition: all var(--transition-fast);
+}
+
+.weaknessCard:hover {
+  border-color: var(--primary-300);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.08);
+}
+
+.weaknessTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.severityBadge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0.1rem 0.45rem;
+  border-radius: var(--radius-full);
+}
+
+.badgeCritical {
+  color: var(--danger-700);
+  background: var(--danger-100);
+}
+
+.badgeWarning {
+  color: var(--warning-700);
+  background: var(--warning-100);
+}
+
+.badgeSuggestion {
+  color: var(--primary-700);
+  background: var(--primary-100);
+}
+
+.weaknessSection {
+  font-size: var(--font-xs);
+  font-weight: 600;
+  color: var(--slate-500);
+  text-transform: capitalize;
+}
+
+.weaknessTitle {
+  font-size: var(--font-sm);
+  font-weight: 700;
+  color: var(--slate-900);
+  line-height: 1.3;
+}
+
+.weaknessDesc {
+  font-size: var(--font-xs);
+  color: var(--slate-600);
+  line-height: 1.5;
+  margin: 0;
+  flex: 1;
+}
+
+.oneClickFixBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--radius-md);
+  font-size: var(--font-xs);
+  font-weight: 600;
+  color: var(--primary-700);
+  background: var(--primary-50);
+  border: 1px solid var(--primary-200);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  margin-top: var(--space-1);
+  align-self: flex-start;
+}
+
+.oneClickFixBtn:hover {
+  background: var(--primary-600);
+  color: #ffffff;
+  border-color: var(--primary-600);
+}
+
+.emptyWeaknessState {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  background: var(--success-50);
+  border: 1px solid var(--success-200);
+  border-radius: var(--radius-lg);
+  color: var(--success-900);
+}
+
+.emptyWeaknessState strong {
+  display: block;
+  font-size: var(--font-sm);
+  margin-bottom: 0.15rem;
+}
+
+.emptyWeaknessState p {
+  font-size: var(--font-xs);
+  color: var(--success-700);
+  margin: 0;
+}
+
+.disclaimerNote {
+  font-size: 0.72rem;
+  color: var(--slate-400);
+  font-style: italic;
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--slate-100);
+}
+
+/* Initial Empty Scan Banner */
+.initialScanBanner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+  border: 1px dashed var(--primary-300);
+  border-radius: var(--radius-lg);
+  flex-wrap: wrap;
+}
+
+.scanBannerText h4 {
+  font-size: var(--font-base);
+  font-weight: 700;
+  color: var(--slate-900);
+  margin: 0 0 0.25rem 0;
+}
+
+.scanBannerText p {
+  font-size: var(--font-xs);
+  color: var(--slate-600);
+  margin: 0;
+  max-width: 600px;
+}
+
+@media (max-width: 860px) {
+  .kpiStrip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .analyticsHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

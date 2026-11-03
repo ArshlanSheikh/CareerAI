@@ -61,6 +61,7 @@ class AnalysisService:
                     "latest_analysis_id": str(res.inserted_id),
                     "overall_score": validated.overall_score,
                     "ats_score": validated.ats_compatibility_score,
+                    "job_readiness_score": validated.job_readiness_score,
                     "last_analyzed_at": now,
                 }
             },
