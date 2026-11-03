@@ -1,5 +1,6 @@
 import React from 'react';
 import Input from '../../../../components/common/Input/Input';
+import s from './EditorSections.module.css';
 
 export default function PersonalInfoEditor({ data = {}, onChange }) {
   const handleChange = (field, value) => {
@@ -11,14 +12,16 @@ export default function PersonalInfoEditor({ data = {}, onChange }) {
 
   return (
     <div>
-      <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--slate-900)', marginBottom: '0.25rem' }}>
-        Personal & Contact Details
-      </h3>
-      <p style={{ fontSize: '0.8125rem', color: 'var(--slate-500)', marginBottom: '1.5rem' }}>
-        Ensure your phone number, email, and professional links are current for recruiters.
-      </p>
+      <div className={s.sectionHeader}>
+        <div className={s.titleGroup}>
+          <h3 className={s.sectionTitle}>Personal & Contact Details</h3>
+          <p className={s.sectionSubtitle}>
+            Ensure your full name, phone number, email, and professional links are current for recruiters.
+          </p>
+        </div>
+      </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
+      <div className={s.gridTwoCol}>
         <Input
           label="Full Name"
           value={data.full_name || ''}
@@ -92,4 +95,3 @@ export default function PersonalInfoEditor({ data = {}, onChange }) {
     </div>
   );
 }
-

@@ -2,50 +2,88 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-sm);
-  font-weight: 500;
+  gap: var(--space-2);
+  font-weight: 600;
   border-radius: var(--radius-md);
   transition: all var(--transition-fast);
   white-space: nowrap;
   outline: none;
+  cursor: pointer;
+  position: relative;
+  border: 1px solid transparent;
+  user-select: none;
 }
 
 .button:focus-visible {
-  box-shadow: 0 0 0 3px var(--primary-200);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.35);
 }
 
 .button:disabled {
-  opacity: 0.6;
+  opacity: 0.55;
   cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 /* Sizes */
 .sm {
-  padding: 0.35rem 0.65rem;
+  padding: 0.35rem 0.75rem;
   font-size: 0.8125rem;
+  border-radius: var(--radius-sm);
+  height: 32px;
 }
 
 .md {
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 1.1rem;
   font-size: 0.875rem;
+  border-radius: var(--radius-md);
+  height: 40px;
 }
 
 .lg {
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem 1.6rem;
   font-size: 1rem;
+  border-radius: var(--radius-lg);
+  height: 48px;
 }
 
-/* Variants */
+/* Primary Variant - Electric Indigo Gradient */
 .primary {
-  background-color: var(--primary-600);
+  background: var(--gradient-primary);
   color: #ffffff;
+  box-shadow: 0 2px 4px rgba(79, 70, 229, 0.2), 0 1px 2px rgba(79, 70, 229, 0.1);
 }
 
 .primary:hover:not(:disabled) {
-  background-color: var(--primary-700);
-  box-shadow: var(--shadow-sm);
+  background: var(--gradient-primary-hover);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+  transform: translateY(-1px);
 }
 
+.primary:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(79, 70, 229, 0.2);
+}
+
+/* AI Magic Variant */
+.ai {
+  background: var(--gradient-ai);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(168, 85, 247, 0.35);
+  position: relative;
+  overflow: hidden;
+}
+
+.ai:hover:not(:disabled) {
+  box-shadow: 0 6px 20px rgba(168, 85, 247, 0.5);
+  transform: translateY(-1px);
+}
+
+.ai:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* Secondary Variant */
 .secondary {
   background-color: var(--slate-100);
   color: var(--slate-700);
@@ -55,19 +93,34 @@
 .secondary:hover:not(:disabled) {
   background-color: var(--slate-200);
   color: var(--slate-900);
+  border-color: var(--slate-300);
+  transform: translateY(-1px);
 }
 
+.secondary:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* Outline Variant */
 .outline {
-  background-color: transparent;
+  background-color: #ffffff;
   color: var(--primary-600);
-  border: 1px solid var(--primary-300);
+  border: 1px solid var(--slate-200);
+  box-shadow: var(--shadow-xs);
 }
 
 .outline:hover:not(:disabled) {
   background-color: var(--primary-50);
-  border-color: var(--primary-500);
+  border-color: var(--primary-300);
+  color: var(--primary-700);
+  transform: translateY(-1px);
 }
 
+.outline:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* Ghost Variant */
 .ghost {
   background-color: transparent;
   color: var(--slate-600);
@@ -78,25 +131,30 @@
   color: var(--slate-900);
 }
 
+/* Danger Variant */
 .danger {
-  background-color: var(--danger-600);
-  color: #ffffff;
+  background-color: #fff1f2;
+  color: #e11d48;
+  border: 1px solid #fecdd3;
 }
 
 .danger:hover:not(:disabled) {
-  background-color: var(--danger-700);
+  background-color: #ffe4e6;
+  border-color: #fda4af;
+  color: #be123c;
+  transform: translateY(-1px);
+}
+
+.danger:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .spinner {
-  animation: spin 1s linear infinite;
+  animation: spin 0.8s linear infinite;
 }
 
 @keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
   to {
     transform: rotate(360deg);
   }
 }
-

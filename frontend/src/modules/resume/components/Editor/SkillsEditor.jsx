@@ -3,6 +3,7 @@ import Button from '../../../../components/common/Button/Button';
 import Card from '../../../../components/common/Card/Card';
 import Input from '../../../../components/common/Input/Input';
 import { Plus, Trash2, X, Code2, Sparkles } from 'lucide-react';
+import s from './EditorSections.module.css';
 
 export default function SkillsEditor({ list = [], onChange, onTriggerAi }) {
   const [newCatName, setNewCatName] = useState('');
@@ -49,35 +50,39 @@ export default function SkillsEditor({ list = [], onChange, onTriggerAi }) {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
-        <div>
-          <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--slate-900)' }}>
-            Technical Skills
-          </h3>
-          <p style={{ fontSize: '0.8125rem', color: 'var(--slate-500)' }}>
+      <div className={s.sectionHeader}>
+        <div className={s.titleGroup}>
+          <h3 className={s.sectionTitle}>Technical Skills</h3>
+          <p className={s.sectionSubtitle}>
             Categorize your technical proficiency into dynamic groups (Languages, Frameworks, Cloud, Databases).
           </p>
         </div>
 
         {onTriggerAi && (
-          <Button
-            variant="outline"
-            size="sm"
-            icon={Sparkles}
+          <button
+            type="button"
+            className={s.aiAssistBtn}
             onClick={onTriggerAi}
-            style={{ color: 'var(--primary-600)', borderColor: 'var(--primary-300)' }}
+            title="AI suggest relevant skills based on your profile"
           >
-            AI Suggest Skills
-          </Button>
+            <Sparkles size={15} />
+            <span>AI Suggest Skills</span>
+          </button>
         )}
       </div>
 
       {/* Add New Category Row */}
-      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', maxWidth: '480px' }}>
+      <div className={s.quickAddRow} style={{ marginBottom: '1.5rem', maxWidth: '480px' }}>
         <Input
           placeholder="New Category (e.g. Cloud & DevOps)"
           value={newCatName}
           onChange={(e) => setNewCatName(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              handleAddCategory();
+            }
+          }}
           style={{ marginBottom: 0, flex: 1 }}
         />
         <Button variant="primary" size="md" icon={Plus} onClick={handleAddCategory}>
@@ -86,52 +91,39 @@ export default function SkillsEditor({ list = [], onChange, onTriggerAi }) {
       </div>
 
       {list.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '2rem', border: '1px dashed var(--slate-300)', borderRadius: 'var(--radius-lg)', color: 'var(--slate-500)' }}>
-          <Code2 size={32} style={{ margin: '0 auto 0.5rem', opacity: 0.6 }} />
-          <p style={{ fontSize: '0.875rem' }}>No skill categories added yet.</p>
+        <div className={s.emptyStateCard}>
+          <div className={s.emptyIconCircle}>
+            <Code2 size={24} />
+          </div>
+          <p className={s.emptyStateText}>No skill categories added yet.</p>
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           {list.map((cat, catIndex) => (
             <Card
               key={cat.id || catIndex}
               title={cat.category}
               subtitle={`${cat.items?.length || 0} skills added`}
               actions={
-                <Button
-                  variant="ghost"
-                  size="sm"
+                <button
+                  type="button"
+                  className={s.deleteIconBtn}
                   onClick={() => handleRemoveCategory(catIndex)}
                   title="Remove category"
-                  style={{ color: 'var(--danger-600)' }}
                 >
                   <Trash2 size={16} />
-                </Button>
+                </button>
               }
             >
               {/* Skill chips list */}
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginBottom: '1rem' }}>
+              <div className={s.tagsContainer} style={{ marginBottom: '1rem' }}>
                 {cat.items?.map((skill, skillIndex) => (
-                  <span
-                    key={skillIndex}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.35rem',
-                      padding: '0.25rem 0.6rem',
-                      backgroundColor: 'var(--primary-50)',
-                      color: 'var(--primary-700)',
-                      borderRadius: 'var(--radius-full)',
-                      fontSize: '0.8125rem',
-                      fontWeight: 500,
-                      border: '1px solid var(--primary-200)',
-                    }}
-                  >
+                  <span key={skillIndex} className={s.tagPill}>
                     <span>{skill}</span>
                     <button
                       type="button"
                       onClick={() => handleRemoveSkill(catIndex, skillIndex)}
-                      style={{ cursor: 'pointer', display: 'flex', color: 'var(--primary-500)' }}
+                      className={s.tagRemoveBtn}
                       aria-label={`Remove ${skill}`}
                     >
                       <X size={12} />
@@ -139,14 +131,14 @@ export default function SkillsEditor({ list = [], onChange, onTriggerAi }) {
                   </span>
                 ))}
                 {(!cat.items || cat.items.length === 0) && (
-                  <span style={{ fontSize: '0.8125rem', color: 'var(--slate-400)', fontStyle: 'italic' }}>
+                  <span style={{ fontSize: '0.8125rem', color: 'var(--color-text-muted)', fontStyle: 'italic' }}>
                     No skills in this category yet.
                   </span>
                 )}
               </div>
 
               {/* Add Skill Input */}
-              <div style={{ display: 'flex', gap: '0.5rem', maxWidth: '380px' }}>
+              <div className={s.quickAddRow} style={{ maxWidth: '380px' }}>
                 <Input
                   placeholder={`Add skill to ${cat.category}...`}
                   value={skillInputs[catIndex] || ''}
@@ -170,4 +162,3 @@ export default function SkillsEditor({ list = [], onChange, onTriggerAi }) {
     </div>
   );
 }
-

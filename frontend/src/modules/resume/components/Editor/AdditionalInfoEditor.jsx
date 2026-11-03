@@ -3,6 +3,7 @@ import Input from '../../../../components/common/Input/Input';
 import Button from '../../../../components/common/Button/Button';
 import Card from '../../../../components/common/Card/Card';
 import { Plus, Trash2 } from 'lucide-react';
+import s from './EditorSections.module.css';
 
 export default function AdditionalInfoEditor({ data = {}, onChange }) {
   const [activeInputs, setActiveInputs] = useState({});
@@ -30,29 +31,40 @@ export default function AdditionalInfoEditor({ data = {}, onChange }) {
   const renderListGroup = (field, title, placeholder) => {
     const items = data[field] || [];
     return (
-      <Card title={title} subtitle={`${items.length} items`} style={{ marginBottom: '1rem' }}>
+      <Card title={title} subtitle={`${items.length} items`} style={{ marginBottom: '1.25rem' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1rem' }}>
           {items.map((item, idx) => (
-            <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.4rem 0.75rem', backgroundColor: 'var(--slate-50)', borderRadius: 'var(--radius-md)', border: '1px solid var(--slate-200)' }}>
-              <span style={{ fontSize: '0.875rem', color: 'var(--slate-800)' }}>{item}</span>
-              <Button
-                variant="ghost"
-                size="sm"
+            <div
+              key={idx}
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '0.45rem 0.75rem',
+                backgroundColor: 'var(--color-bg-secondary)',
+                borderRadius: 'var(--radius-md)',
+                border: '1px solid var(--color-border)',
+              }}
+            >
+              <span style={{ fontSize: '0.875rem', color: 'var(--color-text-primary)' }}>{item}</span>
+              <button
+                type="button"
+                className={s.deleteIconBtn}
                 onClick={() => handleRemove(field, idx)}
-                style={{ color: 'var(--danger-600)', padding: 0 }}
+                title="Remove item"
               >
                 <Trash2 size={14} />
-              </Button>
+              </button>
             </div>
           ))}
           {items.length === 0 && (
-            <span style={{ fontSize: '0.8125rem', color: 'var(--slate-400)', fontStyle: 'italic' }}>
+            <span style={{ fontSize: '0.8125rem', color: 'var(--color-text-muted)', fontStyle: 'italic' }}>
               None added yet.
             </span>
           )}
         </div>
 
-        <div style={{ display: 'flex', gap: '0.5rem', maxWidth: '420px' }}>
+        <div className={s.quickAddRow} style={{ maxWidth: '440px' }}>
           <Input
             placeholder={placeholder}
             value={activeInputs[field] || ''}
@@ -75,12 +87,14 @@ export default function AdditionalInfoEditor({ data = {}, onChange }) {
 
   return (
     <div>
-      <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--slate-900)', marginBottom: '0.25rem' }}>
-        Additional Accomplishments & Info
-      </h3>
-      <p style={{ fontSize: '0.8125rem', color: 'var(--slate-500)', marginBottom: '1.5rem' }}>
-        Awards, hackathons, languages, leadership, and extracurricular honors that set you apart.
-      </p>
+      <div className={s.sectionHeader}>
+        <div className={s.titleGroup}>
+          <h3 className={s.sectionTitle}>Additional Accomplishments & Info</h3>
+          <p className={s.sectionSubtitle}>
+            Awards, hackathons, languages, leadership, and extracurricular honors that set you apart.
+          </p>
+        </div>
+      </div>
 
       {renderListGroup('awards', 'Honors & Awards', 'e.g. 1st Place - University Hackathon 2024')}
       {renderListGroup('hackathons', 'Hackathons & Competitions', 'e.g. HackMIT Finalist (Top 10 of 200 teams)')}
@@ -90,4 +104,3 @@ export default function AdditionalInfoEditor({ data = {}, onChange }) {
     </div>
   );
 }
-

@@ -27,6 +27,8 @@ import {
   Eye,
   Sparkles,
   History,
+  ChevronDown,
+  Edit3,
 } from 'lucide-react';
 
 export default function ResumeEditorPage() {
@@ -264,27 +266,33 @@ export default function ResumeEditorPage() {
           <Link to="/dashboard" className={styles.backBtn} title="Return to Dashboard">
             <ArrowLeft size={18} />
           </Link>
-          <input
-            className={styles.titleInput}
-            value={resume.title || ''}
-            onChange={(e) => updateResumeMeta('title', e.target.value)}
-            placeholder="Untitled Resume"
-            title="Click to rename resume"
-          />
+          <div className={styles.titleWrapper}>
+            <input
+              className={styles.titleInput}
+              value={resume.title || ''}
+              onChange={(e) => updateResumeMeta('title', e.target.value)}
+              placeholder="Untitled Resume"
+              title="Click to rename resume"
+            />
+            <Edit3 size={14} style={{ color: 'var(--slate-400)', flexShrink: 0 }} />
+          </div>
         </div>
 
         <div className={styles.barRight}>
           {/* Template Selector */}
-          <select
-            className={styles.templateSelect}
-            value={resume.template || 'modern'}
-            onChange={(e) => updateResumeMeta('template', e.target.value)}
-            title="Switch resume template"
-          >
-            <option value="modern">Modern Professional</option>
-            <option value="ats">Minimal ATS-Friendly</option>
-            <option value="traditional">Traditional Professional</option>
-          </select>
+          <div className={styles.templateSelectWrapper}>
+            <select
+              className={styles.templateSelect}
+              value={resume.template || 'modern'}
+              onChange={(e) => updateResumeMeta('template', e.target.value)}
+              title="Switch resume template"
+            >
+              <option value="modern">Modern Professional</option>
+              <option value="ats">Minimal ATS-Friendly</option>
+              <option value="traditional">Traditional Professional</option>
+            </select>
+            <ChevronDown size={14} className={styles.selectArrow} />
+          </div>
 
           {/* Dirty / Saved Status */}
           <div className={`${styles.statusIndicator} ${isDirty ? styles.dirty : styles.saved}`}>

@@ -10,10 +10,8 @@ import {
   X,
   ArrowLeft,
   CheckCircle2,
-  AlertCircle,
   Sparkles,
   Info,
-  Loader2,
 } from 'lucide-react';
 
 export default function ResumeImportPage() {
@@ -82,7 +80,7 @@ export default function ResumeImportPage() {
       clearTimeout(stepTimer2);
       setCurrentStep(4);
 
-      notify.success('Resume imported successfully! Please review the extracted sections.');
+      notify.success('Resume imported successfully! Opening in editor...');
       setTimeout(() => {
         navigate(`/resumes/${newResume.id}/edit`);
       }, 500);
@@ -109,9 +107,15 @@ export default function ResumeImportPage() {
         <Link to="/dashboard" className={styles.backLink}>
           <ArrowLeft size={16} /> Back to Dashboard
         </Link>
+        <div className={styles.badgeRow}>
+          <span className={styles.engineBadge}>
+            <Sparkles size={13} />
+            PyMuPDF + Gemini 2.5 Flash
+          </span>
+        </div>
         <h1 className={styles.title}>Import Existing PDF Resume</h1>
         <p className={styles.subtitle}>
-          Upload your current PDF resume to automatically populate CareerAI's standardized editor. PyMuPDF extracts raw layout data and Google Gemini structures it into clean sections.
+          Upload your existing resume to extract and structure education, skills, projects, and experience directly into our ATS-optimized editor.
         </p>
       </div>
 
@@ -125,8 +129,8 @@ export default function ResumeImportPage() {
             onDrop={handleDrop}
             onClick={() => fileInputRef.current?.click()}
           >
-            <div className={styles.dropzoneIcon}>
-              <Upload size={28} />
+            <div className={styles.dropzoneIconWrapper}>
+              <Upload size={30} />
             </div>
             <p className={styles.dropzonePrompt}>
               Click to select or drag and drop your PDF resume
@@ -146,10 +150,17 @@ export default function ResumeImportPage() {
           /* File Preview Badge */
           <div className={styles.fileBadge}>
             <div className={styles.fileBadgeLeft}>
-              <FileText className={styles.fileIcon} size={24} />
+              <div className={styles.fileIconBox}>
+                <FileText size={22} />
+              </div>
               <div>
                 <div className={styles.fileName}>{selectedFile.name}</div>
-                <div className={styles.fileSize}>{formatFileSize(selectedFile.size)}</div>
+                <div className={styles.fileMeta}>
+                  <span className={styles.fileFormatTag}>PDF</span>
+                  <span>{formatFileSize(selectedFile.size)}</span>
+                  <span>•</span>
+                  <span>Ready for parsing</span>
+                </div>
               </div>
             </div>
             {!isProcessing && (
@@ -170,7 +181,7 @@ export default function ResumeImportPage() {
           <div className={styles.progressContainer}>
             <div className={styles.progressTitle}>
               <Sparkles size={16} style={{ color: 'var(--color-primary)' }} />
-              <span>Processing Your Resume</span>
+              <span>Multi-Stage AI Extraction Pipeline</span>
             </div>
 
             <div className={styles.stepsList}>
@@ -184,7 +195,7 @@ export default function ResumeImportPage() {
                     currentStep === 1 ? styles.stepDotActive : currentStep > 1 ? styles.stepDotDone : ''
                   }`}
                 >
-                  {currentStep > 1 ? <CheckCircle2 size={14} /> : '1'}
+                  {currentStep > 1 ? <CheckCircle2 size={16} /> : '1'}
                 </div>
                 <span>Uploading and validating PDF document...</span>
               </div>
@@ -199,9 +210,9 @@ export default function ResumeImportPage() {
                     currentStep === 2 ? styles.stepDotActive : currentStep > 2 ? styles.stepDotDone : ''
                   }`}
                 >
-                  {currentStep > 2 ? <CheckCircle2 size={14} /> : '2'}
+                  {currentStep > 2 ? <CheckCircle2 size={16} /> : '2'}
                 </div>
-                <span>Extracting raw text and layout streams with PyMuPDF...</span>
+                <span>Extracting raw layout and text streams with PyMuPDF...</span>
               </div>
 
               <div
@@ -214,7 +225,7 @@ export default function ResumeImportPage() {
                     currentStep === 3 ? styles.stepDotActive : currentStep > 3 ? styles.stepDotDone : ''
                   }`}
                 >
-                  {currentStep > 3 ? <CheckCircle2 size={14} /> : '3'}
+                  {currentStep > 3 ? <CheckCircle2 size={16} /> : '3'}
                 </div>
                 <span>Gemini AI structuring education, skills, projects, and work experience...</span>
               </div>
@@ -244,12 +255,12 @@ export default function ResumeImportPage() {
             disabled={!selectedFile || isProcessing}
             isLoading={isProcessing}
             onClick={handleImport}
+            icon={Sparkles}
           >
-            <Sparkles size={16} /> Import & Open in Editor
+            Import & Open in Editor
           </Button>
         </div>
       </div>
     </div>
   );
 }
-

@@ -3,6 +3,7 @@ import Input from '../../../../components/common/Input/Input';
 import Button from '../../../../components/common/Button/Button';
 import Card from '../../../../components/common/Card/Card';
 import { Plus, Trash2, FolderGit2, X, Sparkles } from 'lucide-react';
+import s from './EditorSections.module.css';
 
 export default function ProjectsEditor({ list = [], onChange, onTriggerAi }) {
   const [techInputs, setTechInputs] = useState({});
@@ -73,30 +74,30 @@ export default function ProjectsEditor({ list = [], onChange, onTriggerAi }) {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-        <div>
-          <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--slate-900)' }}>
-            Projects
-          </h3>
-          <p style={{ fontSize: '0.8125rem', color: 'var(--slate-500)' }}>
+      <div className={s.sectionHeader}>
+        <div className={s.titleGroup}>
+          <h3 className={s.sectionTitle}>Projects</h3>
+          <p className={s.sectionSubtitle}>
             Highlight personal, academic, or open-source software projects and your actual technical contributions.
           </p>
         </div>
-        <Button variant="outline" size="sm" icon={Plus} onClick={handleAddProject}>
+        <Button variant="primary" size="sm" icon={Plus} onClick={handleAddProject}>
           Add Project
         </Button>
       </div>
 
       {list.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '2rem', border: '1px dashed var(--slate-300)', borderRadius: 'var(--radius-lg)', color: 'var(--slate-500)' }}>
-          <FolderGit2 size={32} style={{ margin: '0 auto 0.5rem', opacity: 0.6 }} />
-          <p style={{ fontSize: '0.875rem' }}>No projects added to this resume yet.</p>
-          <Button variant="secondary" size="sm" icon={Plus} onClick={handleAddProject} style={{ marginTop: '0.75rem' }}>
-            Add Project
+        <div className={s.emptyStateCard}>
+          <div className={s.emptyIconCircle}>
+            <FolderGit2 size={24} />
+          </div>
+          <p className={s.emptyStateText}>No projects added to this resume yet.</p>
+          <Button variant="outline" size="sm" icon={Plus} onClick={handleAddProject} style={{ marginTop: '0.5rem' }}>
+            Add Your First Project
           </Button>
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           {list.map((proj, projIndex) => (
             <Card
               key={proj.id || projIndex}
@@ -105,29 +106,29 @@ export default function ProjectsEditor({ list = [], onChange, onTriggerAi }) {
               actions={
                 <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                   {onTriggerAi && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      icon={Sparkles}
+                    <button
+                      type="button"
+                      className={s.aiAssistBtn}
                       onClick={() => onTriggerAi(projIndex, proj)}
-                      style={{ color: 'var(--primary-600)', borderColor: 'var(--primary-300)' }}
+                      title="Refine bullets with Gemini AI"
+                      style={{ padding: '0.35rem 0.75rem', fontSize: '0.75rem' }}
                     >
-                      AI Assist
-                    </Button>
+                      <Sparkles size={13} />
+                      <span>AI Assist</span>
+                    </button>
                   )}
-                  <Button
-                    variant="ghost"
-                    size="sm"
+                  <button
+                    type="button"
+                    className={s.deleteIconBtn}
                     onClick={() => handleRemove(projIndex)}
                     title="Remove project"
-                    style={{ color: 'var(--danger-600)' }}
                   >
                     <Trash2 size={16} />
-                  </Button>
+                  </button>
                 </div>
               }
             >
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
+              <div className={s.gridTwoCol}>
                 <Input
                   label="Project Title"
                   value={proj.name || ''}
@@ -174,39 +175,26 @@ export default function ProjectsEditor({ list = [], onChange, onTriggerAi }) {
               </div>
 
               {/* Technologies */}
-              <div style={{ marginTop: '0.75rem', marginBottom: '1rem' }}>
-                <label style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--slate-700)', display: 'block', marginBottom: '0.35rem' }}>
+              <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem' }}>
+                <label className={s.textareaLabel} style={{ display: 'block', marginBottom: '0.35rem' }}>
                   Technologies & Frameworks
                 </label>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginBottom: '0.5rem' }}>
+                <div className={s.tagsContainer} style={{ marginBottom: '0.5rem' }}>
                   {proj.technologies?.map((tech, techIdx) => (
-                    <span
-                      key={techIdx}
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '0.35rem',
-                        padding: '0.2rem 0.55rem',
-                        backgroundColor: 'var(--slate-100)',
-                        color: 'var(--slate-800)',
-                        borderRadius: 'var(--radius-sm)',
-                        fontSize: '0.75rem',
-                        fontWeight: 500,
-                        border: '1px solid var(--slate-300)',
-                      }}
-                    >
+                    <span key={techIdx} className={s.tagPill}>
                       <span>{tech}</span>
                       <button
                         type="button"
                         onClick={() => handleRemoveTech(projIndex, techIdx)}
-                        style={{ cursor: 'pointer', display: 'flex' }}
+                        className={s.tagRemoveBtn}
+                        aria-label={`Remove ${tech}`}
                       >
-                        <X size={10} />
+                        <X size={12} />
                       </button>
                     </span>
                   ))}
                 </div>
-                <div style={{ display: 'flex', gap: '0.5rem', maxWidth: '320px' }}>
+                <div className={s.quickAddRow} style={{ maxWidth: '340px' }}>
                   <Input
                     placeholder="Add tech (e.g. Redis, WebSockets)..."
                     value={techInputs[projIndex] || ''}
@@ -237,32 +225,40 @@ export default function ProjectsEditor({ list = [], onChange, onTriggerAi }) {
 
               {/* Key Contributions & Features */}
               <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
-                  <label style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--slate-700)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                  <label className={s.textareaLabel}>
                     Key Bullet Points & Personally Implemented Features
                   </label>
-                  <Button variant="ghost" size="sm" icon={Plus} onClick={() => handleAddBullet(projIndex, 'personally_implemented_features')}>
-                    Add Bullet
-                  </Button>
+                  <button
+                    type="button"
+                    className={s.addBulletBtn}
+                    onClick={() => handleAddBullet(projIndex, 'personally_implemented_features')}
+                  >
+                    <Plus size={13} />
+                    <span>Add Bullet</span>
+                  </button>
                 </div>
-                {proj.personally_implemented_features?.map((bullet, bIdx) => (
-                  <div key={bIdx} style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                    <Input
-                      value={bullet}
-                      onChange={(e) => handleBulletChange(projIndex, 'personally_implemented_features', bIdx, e.target.value)}
-                      placeholder="e.g. Architected Redis pub/sub messaging layer handling 10,000+ concurrent connections"
-                      style={{ marginBottom: 0, flex: 1 }}
-                    />
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleRemoveBullet(projIndex, 'personally_implemented_features', bIdx)}
-                      style={{ color: 'var(--danger-600)' }}
-                    >
-                      <Trash2 size={14} />
-                    </Button>
-                  </div>
-                ))}
+                <div className={s.bulletsContainer}>
+                  {proj.personally_implemented_features?.map((bullet, bIdx) => (
+                    <div key={bIdx} className={s.bulletRow}>
+                      <span className={s.bulletDot} />
+                      <input
+                        className={s.bulletInput}
+                        value={bullet}
+                        onChange={(e) => handleBulletChange(projIndex, 'personally_implemented_features', bIdx, e.target.value)}
+                        placeholder="e.g. Architected Redis pub/sub messaging layer handling 10,000+ concurrent connections"
+                      />
+                      <button
+                        type="button"
+                        className={s.deleteIconBtn}
+                        onClick={() => handleRemoveBullet(projIndex, 'personally_implemented_features', bIdx)}
+                        title="Remove bullet"
+                      >
+                        <Trash2 size={15} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
               </div>
             </Card>
           ))}
@@ -271,4 +267,3 @@ export default function ProjectsEditor({ list = [], onChange, onTriggerAi }) {
     </div>
   );
 }
-

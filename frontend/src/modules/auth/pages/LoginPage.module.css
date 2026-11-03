@@ -4,62 +4,68 @@
 }
 
 .header {
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: 1.75rem;
   text-align: left;
 }
 
 .title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--slate-900);
-  margin-bottom: var(--spacing-xs);
-  letter-spacing: -0.01em;
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  margin: 0 0 0.35rem 0;
+  letter-spacing: -0.02em;
 }
 
 .subtitle {
   font-size: 0.875rem;
-  color: var(--slate-500);
+  color: var(--color-text-secondary);
+  margin: 0;
+  line-height: 1.5;
 }
 
 .form {
   display: flex;
   flex-direction: column;
+  gap: 0.25rem;
 }
 
 .errorBanner {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
-  background-color: var(--danger-50);
+  gap: 0.6rem;
+  background-color: #fef2f2;
   border: 1px solid #fecaca;
-  color: var(--danger-700);
+  color: #b91c1c;
   padding: 0.75rem 1rem;
   border-radius: var(--radius-md);
   font-size: 0.8125rem;
-  margin-bottom: var(--spacing-md);
+  margin-bottom: 1.25rem;
 }
 
 .submitBtn {
   width: 100%;
-  margin-top: var(--spacing-sm);
-  padding: 0.65rem 1rem;
+  margin-top: 0.75rem;
+  padding: 0.75rem 1.25rem;
   font-size: 0.9375rem;
+  font-weight: 700;
 }
 
 .footer {
-  margin-top: var(--spacing-xl);
+  margin-top: 1.75rem;
   text-align: center;
   font-size: 0.875rem;
-  color: var(--slate-600);
+  color: var(--color-text-secondary);
 }
 
 .link {
-  font-weight: 600;
-  color: var(--primary-600);
+  font-weight: 700;
+  color: var(--color-primary);
   margin-left: 0.25rem;
+  text-decoration: none;
+  transition: color var(--transition-fast);
 }
 
 .link:hover {
+  color: var(--color-primary-dark);
   text-decoration: underline;
 }
-

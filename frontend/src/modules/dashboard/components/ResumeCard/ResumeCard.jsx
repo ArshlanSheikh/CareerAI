@@ -2,9 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './ResumeCard.module.css';
 import Button from '../../../../components/common/Button/Button';
-import { resumeService } from '../../../resume/services/resumeService';
 import {
-  FileText,
   Briefcase,
   Calendar,
   MoreVertical,
@@ -12,8 +10,6 @@ import {
   Edit2,
   Trash2,
   ExternalLink,
-  Download,
-  History,
 } from 'lucide-react';
 
 export default function ResumeCard({
@@ -57,6 +53,7 @@ export default function ResumeCard({
             <span className={styles.templateBadge}>{resume.template || 'Modern'}</span>
             <span className={styles.versionBadge}>v{resume.current_version || 1}</span>
             <span className={`${styles.statusBadge} ${resume.status === 'completed' ? styles.completed : styles.draft}`}>
+              <span className={styles.statusDot} />
               {resume.status === 'completed' ? 'Completed' : 'Draft'}
             </span>
           </div>
@@ -107,18 +104,6 @@ export default function ResumeCard({
                 className={styles.menuItem}
                 onClick={() => {
                   setMenuOpen(false);
-                  onRename(resume);
-                }}
-              >
-                <Edit2 size={14} />
-                <span>Rename</span>
-              </button>
-
-              <button
-                type="button"
-                className={styles.menuItem}
-                onClick={() => {
-                  setMenuOpen(false);
                   onDuplicate(resume.id);
                 }}
               >
@@ -126,30 +111,16 @@ export default function ResumeCard({
                 <span>Duplicate</span>
               </button>
 
-              <Link
-                to={`/resumes/${resume.id}/edit`}
-                className={styles.menuItem}
-                onClick={() => setMenuOpen(false)}
-              >
-                <History size={14} />
-                <span>Version History (v{resume.current_version || 1})</span>
-              </Link>
-
               <button
                 type="button"
                 className={styles.menuItem}
-                onClick={async () => {
+                onClick={() => {
                   setMenuOpen(false);
-                  try {
-                    const cleanName = (resume.title || 'Resume').replace(/[^a-zA-Z0-9_-]/g, '_');
-                    await resumeService.downloadPdf(resume.id, `${cleanName}.pdf`);
-                  } catch (err) {
-                    console.error('Failed to download resume PDF:', err);
-                  }
+                  onRename(resume);
                 }}
               >
-                <Download size={14} />
-                <span>Download PDF</span>
+                <Edit2 size={14} />
+                <span>Rename</span>
               </button>
 
               <button
@@ -170,4 +141,3 @@ export default function ResumeCard({
     </div>
   );
 }
-

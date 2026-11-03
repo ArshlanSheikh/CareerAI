@@ -2,6 +2,7 @@ import React from 'react';
 import Input from '../../../../components/common/Input/Input';
 import Button from '../../../../components/common/Button/Button';
 import { Sparkles } from 'lucide-react';
+import s from './EditorSections.module.css';
 
 export default function SummaryEditor({ data = {}, onChange, onTriggerAi }) {
   const handleChange = (field, value) => {
@@ -11,32 +12,32 @@ export default function SummaryEditor({ data = {}, onChange, onTriggerAi }) {
     });
   };
 
+  const wordCount = (data.content || '').split(/\s+/).filter(Boolean).length;
+
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
-        <div>
-          <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--slate-900)' }}>
-            Professional Summary
-          </h3>
-          <p style={{ fontSize: '0.8125rem', color: 'var(--slate-500)' }}>
+      <div className={s.sectionHeader}>
+        <div className={s.titleGroup}>
+          <h3 className={s.sectionTitle}>Professional Summary</h3>
+          <p className={s.sectionSubtitle}>
             A concise 2-4 sentence career overview highlighting your key qualifications and target role.
           </p>
         </div>
 
         {onTriggerAi && (
-          <Button
-            variant="outline"
-            size="sm"
-            icon={Sparkles}
+          <button
+            type="button"
+            className={s.aiAssistBtn}
             onClick={onTriggerAi}
-            style={{ color: 'var(--primary-600)', borderColor: 'var(--primary-300)' }}
+            title="Refine or generate with Gemini AI"
           >
-            AI Summary Assist
-          </Button>
+            <Sparkles size={15} />
+            <span>AI Summary Assist</span>
+          </button>
         )}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+      <div className={s.gridTwoCol} style={{ marginBottom: '1.25rem' }}>
         <Input
           label="Target Role"
           value={data.target_role || ''}
@@ -52,33 +53,19 @@ export default function SummaryEditor({ data = {}, onChange, onTriggerAi }) {
         />
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
-        <label style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--slate-700)' }}>
-          Summary Content
-        </label>
+      <div className={s.textareaGroup}>
+        <div className={s.textareaHeader}>
+          <label className={s.textareaLabel}>Summary Content</label>
+          <span className={s.wordCountBadge}>{wordCount} words</span>
+        </div>
         <textarea
           rows={6}
           value={data.content || ''}
           onChange={(e) => handleChange('content', e.target.value)}
-          placeholder="Motivated Computer Science graduate with strong foundational knowledge in React, Python, and scalable web architectures. Proven ability to build full-stack projects..."
-          style={{
-            width: '100%',
-            padding: '0.75rem',
-            borderRadius: 'var(--radius-md)',
-            border: '1px solid var(--slate-300)',
-            fontSize: '0.875rem',
-            lineHeight: 1.5,
-            color: 'var(--slate-900)',
-            outline: 'none',
-            resize: 'vertical',
-            fontFamily: 'inherit',
-          }}
+          placeholder="Motivated Computer Science student with strong foundational skills in full-stack web development, Python, and modern cloud architectures. Eager to contribute to high-impact engineering teams..."
+          className={s.textarea}
         />
-        <span style={{ fontSize: '0.75rem', color: 'var(--slate-400)', textAlign: 'right' }}>
-          {(data.content || '').split(/\s+/).filter(Boolean).length} words
-        </span>
       </div>
     </div>
   );
 }
-

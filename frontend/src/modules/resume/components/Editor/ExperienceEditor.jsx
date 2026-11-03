@@ -3,6 +3,7 @@ import Input from '../../../../components/common/Input/Input';
 import Button from '../../../../components/common/Button/Button';
 import Card from '../../../../components/common/Card/Card';
 import { Plus, Trash2, Briefcase, Sparkles } from 'lucide-react';
+import s from './EditorSections.module.css';
 
 export default function ExperienceEditor({ list = [], onChange, onTriggerAi }) {
   const handleAdd = () => {
@@ -54,30 +55,30 @@ export default function ExperienceEditor({ list = [], onChange, onTriggerAi }) {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-        <div>
-          <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--slate-900)' }}>
-            Work Experience
-          </h3>
-          <p style={{ fontSize: '0.8125rem', color: 'var(--slate-500)' }}>
+      <div className={s.sectionHeader}>
+        <div className={s.titleGroup}>
+          <h3 className={s.sectionTitle}>Work Experience</h3>
+          <p className={s.sectionSubtitle}>
             Add full-time, part-time, or contract professional employment history.
           </p>
         </div>
-        <Button variant="outline" size="sm" icon={Plus} onClick={handleAdd}>
+        <Button variant="primary" size="sm" icon={Plus} onClick={handleAdd}>
           Add Experience
         </Button>
       </div>
 
       {list.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '2rem', border: '1px dashed var(--slate-300)', borderRadius: 'var(--radius-lg)', color: 'var(--slate-500)' }}>
-          <Briefcase size={32} style={{ margin: '0 auto 0.5rem', opacity: 0.6 }} />
-          <p style={{ fontSize: '0.875rem' }}>No professional experience records added yet.</p>
-          <Button variant="secondary" size="sm" icon={Plus} onClick={handleAdd} style={{ marginTop: '0.75rem' }}>
+        <div className={s.emptyStateCard}>
+          <div className={s.emptyIconCircle}>
+            <Briefcase size={24} />
+          </div>
+          <p className={s.emptyStateText}>No professional experience records added yet.</p>
+          <Button variant="outline" size="sm" icon={Plus} onClick={handleAdd} style={{ marginTop: '0.5rem' }}>
             Add Work Experience
           </Button>
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           {list.map((exp, expIndex) => (
             <Card
               key={exp.id || expIndex}
@@ -86,29 +87,29 @@ export default function ExperienceEditor({ list = [], onChange, onTriggerAi }) {
               actions={
                 <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                   {onTriggerAi && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      icon={Sparkles}
+                    <button
+                      type="button"
+                      className={s.aiAssistBtn}
                       onClick={() => onTriggerAi(expIndex, exp)}
-                      style={{ color: 'var(--primary-600)', borderColor: 'var(--primary-300)' }}
+                      title="Refine bullets with Gemini AI"
+                      style={{ padding: '0.35rem 0.75rem', fontSize: '0.75rem' }}
                     >
-                      AI Assist
-                    </Button>
+                      <Sparkles size={13} />
+                      <span>AI Assist</span>
+                    </button>
                   )}
-                  <Button
-                    variant="ghost"
-                    size="sm"
+                  <button
+                    type="button"
+                    className={s.deleteIconBtn}
                     onClick={() => handleRemove(expIndex)}
                     title="Remove experience"
-                    style={{ color: 'var(--danger-600)' }}
                   >
                     <Trash2 size={16} />
-                  </Button>
+                  </button>
                 </div>
               }
             >
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
+              <div className={s.gridTwoCol}>
                 <Input
                   label="Job Title"
                   value={exp.job_title || ''}
@@ -150,33 +151,41 @@ export default function ExperienceEditor({ list = [], onChange, onTriggerAi }) {
               </div>
 
               {/* Responsibilities bullets */}
-              <div style={{ marginTop: '0.75rem', marginBottom: '1rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
-                  <label style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--slate-700)' }}>
+              <div style={{ marginTop: '0.75rem', marginBottom: '0.5rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                  <label className={s.textareaLabel}>
                     Key Responsibilities & Bullet Points
                   </label>
-                  <Button variant="ghost" size="sm" icon={Plus} onClick={() => handleAddBullet(expIndex, 'responsibilities')}>
-                    Add Bullet
-                  </Button>
+                  <button
+                    type="button"
+                    className={s.addBulletBtn}
+                    onClick={() => handleAddBullet(expIndex, 'responsibilities')}
+                  >
+                    <Plus size={13} />
+                    <span>Add Bullet</span>
+                  </button>
                 </div>
-                {exp.responsibilities?.map((bullet, bIdx) => (
-                  <div key={bIdx} style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                    <Input
-                      value={bullet}
-                      onChange={(e) => handleBulletChange(expIndex, 'responsibilities', bIdx, e.target.value)}
-                      placeholder="e.g. Engineered distributed event queue handling 5M daily webhook deliveries"
-                      style={{ marginBottom: 0, flex: 1 }}
-                    />
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleRemoveBullet(expIndex, 'responsibilities', bIdx)}
-                      style={{ color: 'var(--danger-600)' }}
-                    >
-                      <Trash2 size={14} />
-                    </Button>
-                  </div>
-                ))}
+                <div className={s.bulletsContainer}>
+                  {exp.responsibilities?.map((bullet, bIdx) => (
+                    <div key={bIdx} className={s.bulletRow}>
+                      <span className={s.bulletDot} />
+                      <input
+                        className={s.bulletInput}
+                        value={bullet}
+                        onChange={(e) => handleBulletChange(expIndex, 'responsibilities', bIdx, e.target.value)}
+                        placeholder="e.g. Engineered distributed event queue handling 5M daily webhook deliveries"
+                      />
+                      <button
+                        type="button"
+                        className={s.deleteIconBtn}
+                        onClick={() => handleRemoveBullet(expIndex, 'responsibilities', bIdx)}
+                        title="Remove bullet"
+                      >
+                        <Trash2 size={15} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
               </div>
             </Card>
           ))}
@@ -185,4 +194,3 @@ export default function ExperienceEditor({ list = [], onChange, onTriggerAi }) {
     </div>
   );
 }
-

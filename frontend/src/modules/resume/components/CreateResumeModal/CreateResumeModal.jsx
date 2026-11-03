@@ -20,16 +20,19 @@ const TEMPLATES = [
     id: 'modern',
     name: 'Modern Professional',
     desc: 'Contemporary layout with balanced hierarchy',
+    icon: LayoutTemplate,
   },
   {
     id: 'ats',
     name: 'Minimal ATS-Friendly',
     desc: 'Clean single column optimized for scanners',
+    icon: FileCheck2,
   },
   {
     id: 'traditional',
     name: 'Traditional',
     desc: 'Classic serif typography & formal headers',
+    icon: FileText,
   },
 ];
 
@@ -122,7 +125,7 @@ export default function CreateResumeModal({ isOpen, onClose, onCreated }) {
         </div>
 
         {errorMessage && (
-          <div style={{ color: 'var(--danger-700)', backgroundColor: 'var(--danger-50)', padding: '0.65rem', borderRadius: 'var(--radius-md)', fontSize: '0.8125rem' }}>
+          <div style={{ color: 'var(--danger-700)', backgroundColor: 'var(--danger-50)', padding: '0.65rem 0.85rem', borderRadius: 'var(--radius-md)', fontSize: '0.8125rem', border: '1px solid #fecaca' }}>
             {errorMessage}
           </div>
         )}
@@ -135,7 +138,7 @@ export default function CreateResumeModal({ isOpen, onClose, onCreated }) {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. Full Stack Developer Resume"
-              helperText="Give this resume a descriptive name (e.g. Frontend Internship, Google Application)"
+              helperText="Descriptive label (e.g. Frontend Internship, Google Application)"
               required
               autoFocus
             />
@@ -150,21 +153,25 @@ export default function CreateResumeModal({ isOpen, onClose, onCreated }) {
 
             {/* Template Selection */}
             <div style={{ marginBottom: '1.25rem' }}>
-              <label style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--slate-700)', display: 'block' }}>
-                Select Starting Template
-              </label>
+              <span className={styles.sectionLabel}>Select Starting Template</span>
               <div className={styles.templateGrid}>
-                {TEMPLATES.map((tmpl) => (
-                  <div
-                    key={tmpl.id}
-                    className={`${styles.templateCard} ${template === tmpl.id ? styles.selectedTemplate : ''}`}
-                    onClick={() => setTemplate(tmpl.id)}
-                  >
-                    <LayoutTemplate size={24} color={template === tmpl.id ? 'var(--primary-600)' : 'var(--slate-400)'} />
-                    <span className={styles.templateTitle}>{tmpl.name}</span>
-                    <span className={styles.templateDesc}>{tmpl.desc}</span>
-                  </div>
-                ))}
+                {TEMPLATES.map((tmpl) => {
+                  const Icon = tmpl.icon;
+                  const isSelected = template === tmpl.id;
+                  return (
+                    <div
+                      key={tmpl.id}
+                      className={`${styles.templateCard} ${isSelected ? styles.selectedTemplate : ''}`}
+                      onClick={() => setTemplate(tmpl.id)}
+                    >
+                      <div className={styles.templateIconWrapper}>
+                        <Icon size={20} />
+                      </div>
+                      <span className={styles.templateTitle}>{tmpl.name}</span>
+                      <span className={styles.templateDesc}>{tmpl.desc}</span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
@@ -180,7 +187,7 @@ export default function CreateResumeModal({ isOpen, onClose, onCreated }) {
                 <span className={styles.checkboxLabel}>
                   Copy information from Student Profile
                 </span>
-                <span className={styles.checkboxDesc}>
+                <span className={styles.checkboxSubtext}>
                   Pre-fills contact info, education, skills, and projects from your profile. Changes to this resume won't modify your original profile.
                 </span>
               </div>
@@ -188,31 +195,32 @@ export default function CreateResumeModal({ isOpen, onClose, onCreated }) {
           </form>
         ) : (
           /* OPTION B: IMPORT EXISTING PDF */
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', textAlign: 'center' }}>
-            <div className={styles.uploadArea} onClick={() => navigate('/resumes/import')}>
-              <Upload size={36} color="var(--primary-600)" />
-              <div>
-                <p className={styles.uploadText}>Click to upload your existing PDF resume</p>
-                <p className={styles.uploadSubtext}>
-                  PyMuPDF and Gemini AI will extract text and map it into the standardized resume editor.
-                </p>
-              </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onClose();
-                  navigate('/resumes/import');
-                }}
-              >
-                Go to PDF Importer
-              </Button>
+          <div className={styles.importRedirectBox}>
+            <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(168, 85, 247, 0.15))', color: 'var(--color-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Upload size={28} />
             </div>
+            <div>
+              <h4 style={{ fontSize: '1.05rem', fontWeight: 700, margin: '0 0 0.35rem 0', color: 'var(--color-text-primary)' }}>
+                Import Your Existing PDF Resume
+              </h4>
+              <p style={{ fontSize: '0.8125rem', color: 'var(--color-text-secondary)', margin: 0, maxWidth: 380, lineHeight: 1.5 }}>
+                PyMuPDF extracts raw text and Google Gemini structures it automatically into ATS-compliant sections.
+              </p>
+            </div>
+            <Button
+              variant="primary"
+              size="md"
+              icon={Upload}
+              onClick={() => {
+                onClose();
+                navigate('/resumes/import');
+              }}
+            >
+              Open PDF Importer
+            </Button>
           </div>
         )}
       </div>
     </Modal>
   );
 }
-

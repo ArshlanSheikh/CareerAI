@@ -3,6 +3,7 @@ import Input from '../../../../components/common/Input/Input';
 import Button from '../../../../components/common/Button/Button';
 import Card from '../../../../components/common/Card/Card';
 import { Plus, Trash2, GraduationCap } from 'lucide-react';
+import s from './EditorSections.module.css';
 
 export default function EducationEditor({ list = [], onChange }) {
   const handleAdd = () => {
@@ -32,48 +33,47 @@ export default function EducationEditor({ list = [], onChange }) {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-        <div>
-          <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--slate-900)' }}>
-            Education
-          </h3>
-          <p style={{ fontSize: '0.8125rem', color: 'var(--slate-500)' }}>
+      <div className={s.sectionHeader}>
+        <div className={s.titleGroup}>
+          <h3 className={s.sectionTitle}>Education</h3>
+          <p className={s.sectionSubtitle}>
             List your university degrees, majors, GPA, and relevant academic coursework.
           </p>
         </div>
-        <Button variant="outline" size="sm" icon={Plus} onClick={handleAdd}>
+        <Button variant="primary" size="sm" icon={Plus} onClick={handleAdd}>
           Add Education
         </Button>
       </div>
 
       {list.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '2rem', border: '1px dashed var(--slate-300)', borderRadius: 'var(--radius-lg)', color: 'var(--slate-500)' }}>
-          <GraduationCap size={32} style={{ margin: '0 auto 0.5rem', opacity: 0.6 }} />
-          <p style={{ fontSize: '0.875rem' }}>No education records added yet.</p>
-          <Button variant="secondary" size="sm" icon={Plus} onClick={handleAdd} style={{ marginTop: '0.75rem' }}>
+        <div className={s.emptyStateCard}>
+          <div className={s.emptyIconCircle}>
+            <GraduationCap size={24} />
+          </div>
+          <p className={s.emptyStateText}>No education records added yet.</p>
+          <Button variant="outline" size="sm" icon={Plus} onClick={handleAdd} style={{ marginTop: '0.5rem' }}>
             Add College / Degree
           </Button>
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           {list.map((item, index) => (
             <Card
               key={item.id || index}
               title={item.degree ? `${item.degree} in ${item.field_of_study || 'Major'}` : `Education #${index + 1}`}
               subtitle={item.institution || 'Institution name'}
               actions={
-                <Button
-                  variant="ghost"
-                  size="sm"
+                <button
+                  type="button"
+                  className={s.deleteIconBtn}
                   onClick={() => handleRemove(index)}
                   title="Remove education"
-                  style={{ color: 'var(--danger-600)' }}
                 >
                   <Trash2 size={16} />
-                </Button>
+                </button>
               }
             >
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
+              <div className={s.gridTwoCol}>
                 <Input
                   label="Degree"
                   value={item.degree || ''}
@@ -141,4 +141,3 @@ export default function EducationEditor({ list = [], onChange }) {
     </div>
   );
 }
-

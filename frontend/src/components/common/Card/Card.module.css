@@ -1,9 +1,9 @@
 .card {
   background-color: #ffffff;
   border: 1px solid var(--slate-200);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  transition: all var(--transition-fast);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+  transition: all var(--transition-normal);
   overflow: hidden;
 }
 
@@ -13,42 +13,43 @@
 
 .clickable:hover {
   border-color: var(--primary-300);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-1px);
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-2px);
 }
 
 .header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  padding: var(--spacing-md) var(--spacing-lg);
+  align-items: center;
+  padding: var(--space-4) var(--space-5);
+  background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
   border-bottom: 1px solid var(--slate-100);
 }
 
 .titles {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs);
+  gap: 2px;
 }
 
 .title {
-  font-size: 1.125rem;
-  font-weight: 600;
+  font-size: var(--font-base);
+  font-weight: 700;
   color: var(--slate-900);
+  letter-spacing: -0.01em;
 }
 
 .subtitle {
-  font-size: 0.8125rem;
+  font-size: var(--font-xs);
   color: var(--slate-500);
 }
 
 .actions {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
+  gap: var(--space-2);
 }
 
 .content {
-  padding: var(--spacing-lg);
+  padding: var(--space-5);
 }
-

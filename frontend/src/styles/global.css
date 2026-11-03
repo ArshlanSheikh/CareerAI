@@ -6,13 +6,22 @@
   padding: 0;
 }
 
-html, body {
-  height: 100%;
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  min-height: 100vh;
   font-family: var(--font-sans);
   background-color: var(--slate-50);
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.08), transparent),
+    radial-gradient(circle at 90% 10%, rgba(236, 72, 153, 0.03), transparent 40%);
   color: var(--slate-800);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 #root {
@@ -24,7 +33,7 @@ html, body {
 a {
   color: var(--primary-600);
   text-decoration: none;
-  transition: color var(--transition-fast);
+  transition: all var(--transition-fast);
 }
 
 a:hover {
@@ -36,20 +45,22 @@ button {
   cursor: pointer;
   border: none;
   background: none;
+  transition: all var(--transition-fast);
 }
 
 input, textarea, select {
   font-family: inherit;
+  color: var(--slate-800);
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--slate-100);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -61,3 +72,41 @@ input, textarea, select {
   background: var(--slate-400);
 }
 
+/* Global Keyframe Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 15px -3px rgba(99, 102, 241, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 25px 2px rgba(168, 85, 247, 0.5);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}

@@ -1,12 +1,12 @@
 .toastContainer {
   position: fixed;
-  top: var(--spacing-lg);
-  right: var(--spacing-lg);
+  top: 1.5rem;
+  right: 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
+  gap: 0.75rem;
   z-index: 99999;
-  max-width: 400px;
+  max-width: 420px;
   width: 100%;
   pointer-events: none;
 }
@@ -14,12 +14,13 @@
 .toast {
   display: flex;
   align-items: flex-start;
-  gap: var(--spacing-md);
-  padding: var(--spacing-md);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
+  gap: 0.85rem;
+  padding: 1rem 1.15rem;
+  border-radius: var(--radius-xl);
+  box-shadow: 0 16px 36px -8px rgba(15, 23, 42, 0.18), 0 0 1px rgba(15, 23, 42, 0.1);
   pointer-events: auto;
-  animation: slideIn var(--transition-normal) ease-out;
+  animation: slideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(12px);
   border: 1px solid transparent;
 }
 
@@ -34,8 +35,8 @@
 
 .message {
   font-size: 0.875rem;
-  font-weight: 500;
-  line-height: 1.4;
+  font-weight: 600;
+  line-height: 1.45;
 }
 
 .closeButton {
@@ -44,46 +45,51 @@
   align-items: center;
   justify-content: center;
   color: inherit;
-  opacity: 0.7;
-  transition: opacity var(--transition-fast);
+  opacity: 0.6;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.2rem;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
 }
 
 .closeButton:hover {
   opacity: 1;
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 .success {
-  background-color: var(--success-50);
-  border-color: #bbf7d0;
-  color: var(--success-700);
+  background: rgba(240, 253, 244, 0.95);
+  border-color: #86efac;
+  color: #166534;
 }
 
 .error {
-  background-color: var(--danger-50);
-  border-color: #fecaca;
-  color: var(--danger-700);
+  background: rgba(254, 242, 242, 0.95);
+  border-color: #fca5a5;
+  color: #991b1b;
 }
 
 .warning {
-  background-color: var(--warning-50);
-  border-color: #fef08a;
-  color: var(--warning-600);
+  background: rgba(254, 252, 232, 0.95);
+  border-color: #fde047;
+  color: #854d0e;
 }
 
 .info {
-  background-color: var(--primary-50);
-  border-color: var(--primary-200);
-  color: var(--primary-700);
+  background: rgba(238, 242, 255, 0.95);
+  border-color: #a5b4fc;
+  color: #3730a3;
 }
 
 @keyframes slideIn {
   from {
     opacity: 0;
-    transform: translateX(20px);
+    transform: translateX(30px) scale(0.96);
   }
   to {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateX(0) scale(1);
   }
 }
-

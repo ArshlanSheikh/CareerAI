@@ -3,6 +3,7 @@ import Input from '../../../../components/common/Input/Input';
 import Button from '../../../../components/common/Button/Button';
 import Card from '../../../../components/common/Card/Card';
 import { Plus, Trash2, Award } from 'lucide-react';
+import s from './EditorSections.module.css';
 
 export default function CertificationsEditor({ list = [], onChange }) {
   const handleAdd = () => {
@@ -28,48 +29,47 @@ export default function CertificationsEditor({ list = [], onChange }) {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-        <div>
-          <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--slate-900)' }}>
-            Certifications & Licenses
-          </h3>
-          <p style={{ fontSize: '0.8125rem', color: 'var(--slate-500)' }}>
+      <div className={s.sectionHeader}>
+        <div className={s.titleGroup}>
+          <h3 className={s.sectionTitle}>Certifications & Licenses</h3>
+          <p className={s.sectionSubtitle}>
             Add industry credentials (AWS Certified Developer, CompTIA, Google Cloud Associate).
           </p>
         </div>
-        <Button variant="outline" size="sm" icon={Plus} onClick={handleAdd}>
+        <Button variant="primary" size="sm" icon={Plus} onClick={handleAdd}>
           Add Certification
         </Button>
       </div>
 
       {list.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '2rem', border: '1px dashed var(--slate-300)', borderRadius: 'var(--radius-lg)', color: 'var(--slate-500)' }}>
-          <Award size={32} style={{ margin: '0 auto 0.5rem', opacity: 0.6 }} />
-          <p style={{ fontSize: '0.875rem' }}>No certifications added yet.</p>
-          <Button variant="secondary" size="sm" icon={Plus} onClick={handleAdd} style={{ marginTop: '0.75rem' }}>
+        <div className={s.emptyStateCard}>
+          <div className={s.emptyIconCircle}>
+            <Award size={24} />
+          </div>
+          <p className={s.emptyStateText}>No certifications added yet.</p>
+          <Button variant="outline" size="sm" icon={Plus} onClick={handleAdd} style={{ marginTop: '0.5rem' }}>
             Add Certificate
           </Button>
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           {list.map((cert, index) => (
             <Card
               key={cert.id || index}
               title={cert.certification_name || `Certificate #${index + 1}`}
               subtitle={cert.issuing_organization || 'Issuing body'}
               actions={
-                <Button
-                  variant="ghost"
-                  size="sm"
+                <button
+                  type="button"
+                  className={s.deleteIconBtn}
                   onClick={() => handleRemove(index)}
                   title="Remove certificate"
-                  style={{ color: 'var(--danger-600)' }}
                 >
                   <Trash2 size={16} />
-                </Button>
+                </button>
               }
             >
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
+              <div className={s.gridTwoCol}>
                 <Input
                   label="Certification Name"
                   value={cert.certification_name || ''}
@@ -107,4 +107,3 @@ export default function CertificationsEditor({ list = [], onChange }) {
     </div>
   );
 }
-

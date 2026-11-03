@@ -6,7 +6,10 @@ export default function QuickPreview({ content = {}, template = 'modern', target
   return (
     <div className={styles.previewWrapper}>
       <div className={styles.previewHeader}>
-        <span className={styles.previewTitle}>Live Preview ({template})</span>
+        <span className={styles.previewTitle}>
+          <span className={styles.liveIndicator} />
+          Live Preview ({template})
+        </span>
       </div>
 
       <div className={styles.paperSheet} style={{ padding: 0 }}>
