@@ -11,15 +11,10 @@ import {
   ArrowLeft,
   CheckCircle2,
   Sparkles,
-  Info,
-  User,
-  GraduationCap,
-  Code2,
-  FolderGit2,
-  Briefcase,
-  Layers,
   ArrowRight,
-  RotateCcw,
+  ShieldCheck,
+  Zap,
+  TrendingUp,
 } from 'lucide-react';
 
 const ALLOWED_EXTENSIONS = ['.pdf', '.docx', '.doc'];
@@ -28,10 +23,7 @@ export default function ResumeImportPage() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [currentStep, setCurrentStep] = useState(0); // 0 = idle, 1 = upload, 2 = extraction, 3 = gemini
-  const [extractedData, setExtractedData] = useState(null);
-  const [resumeTitle, setResumeTitle] = useState('');
-  const [isFinalizing, setIsFinalizing] = useState(false);
+  const [processingStep, setProcessingStep] = useState(1);
   const fileInputRef = useRef(null);
 
   const navigate = useNavigate();
@@ -73,71 +65,11 @@ export default function ResumeImportPage() {
       return;
     }
     setSelectedFile(file);
-    setExtractedData(null);
   };
 
   const getFileFormat = (fileName) => {
     if (!fileName) return 'FILE';
-    const ext = fileName.split('.').pop().toUpperCase();
-    return ext;
-  };
-
-  const handleExtractAndReview = async () => {
-    if (!selectedFile) return;
-
-    setIsProcessing(true);
-    setCurrentStep(1);
-
-    const stepTimer1 = setTimeout(() => setCurrentStep(2), 900);
-    const stepTimer2 = setTimeout(() => setCurrentStep(3), 2200);
-
-    try {
-      const formData = new FormData();
-      formData.append('file', selectedFile);
-
-      const response = await resumeService.extractResumePreview(formData);
-      clearTimeout(stepTimer1);
-      clearTimeout(stepTimer2);
-      setCurrentStep(4);
-
-      setExtractedData(response);
-      setResumeTitle(response.suggested_title || `${selectedFile.name.split('.')[0]} Resume`);
-      notify.success('Resume parsed successfully! Please review the extracted sections below.');
-    } catch (err) {
-      clearTimeout(stepTimer1);
-      clearTimeout(stepTimer2);
-      setCurrentStep(0);
-      notify.error(err.message || 'Failed to extract resume. Please try another document or create from scratch.');
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
-  const handleConfirmAndCreate = async () => {
-    if (!extractedData?.parsed_content) return;
-
-    setIsFinalizing(true);
-    try {
-      const newResume = await resumeService.importFromConfirmed(
-        resumeTitle.trim() || extractedData.suggested_title,
-        extractedData.parsed_content
-      );
-
-      notify.success('Resume imported successfully! Launching Analytics Dashboard...');
-      setTimeout(() => {
-        navigate(`/resumes/${newResume.id}/analysis`);
-      }, 400);
-    } catch (err) {
-      notify.error(err.message || 'Failed to create resume from extracted data');
-      setIsFinalizing(false);
-    }
-  };
-
-  const handleReset = () => {
-    setSelectedFile(null);
-    setExtractedData(null);
-    setCurrentStep(0);
-    setResumeTitle('');
+    return fileName.split('.').pop().toUpperCase();
   };
 
   const formatFileSize = (bytes) => {
@@ -147,9 +79,35 @@ export default function ResumeImportPage() {
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
   };
 
-  const isDocFormat = (fileName) => {
-    const ext = (fileName || '').toLowerCase();
-    return ext.endsWith('.docx') || ext.endsWith('.doc');
+  const handleUploadAndAnalyze = async () => {
+    if (!selectedFile) return;
+
+    setIsProcessing(true);
+    setProcessingStep(1);
+
+    const timer1 = setTimeout(() => setProcessingStep(2), 1200);
+    const timer2 = setTimeout(() => setProcessingStep(3), 2600);
+
+    try {
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+
+      // Directly create resume from document in single step
+      const newResume = await resumeService.importResume(formData);
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      setProcessingStep(3);
+
+      notify.success('Resume parsed successfully! Opening your Analytics Dashboard...');
+      setTimeout(() => {
+        navigate(`/resumes/${newResume.id}/analysis?autoAnalyze=1`);
+      }, 500);
+    } catch (err) {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      setIsProcessing(false);
+      notify.error(err.message || 'Failed to parse resume document. Please try again.');
+    }
   };
 
   return (
@@ -161,397 +119,142 @@ export default function ResumeImportPage() {
         </Link>
         <div className={styles.badgeRow}>
           <span className={styles.engineBadge}>
-            <Sparkles size={13} /> Multi-Format Engine (PyMuPDF + Word)
+            <Sparkles size={13} />
+            AI Instant Resume Analytics
           </span>
           <span className={styles.formatBadge}>PDF</span>
           <span className={styles.formatBadge}>DOCX</span>
           <span className={styles.formatBadge}>DOC</span>
         </div>
-        <h1 className={styles.title}>
-          {extractedData ? 'Review Extracted Resume' : 'Import Existing Resume'}
-        </h1>
+        <h1 className={styles.title}>Upload Resume for Instant Analytics</h1>
         <p className={styles.subtitle}>
-          {extractedData
-            ? 'Review the extracted contact info, education, skills, and projects below. You can make final adjustments before opening inside the resume editor.'
-            : 'Upload your current resume in PDF or Word format. Our multi-format parsing pipeline extracts layout data and Google Gemini structures it into our standardized ATS schema.'}
+          Upload your existing resume to instantly view your ATS compatibility score, section strengths, and access a pre-built AI improved version.
         </p>
       </div>
 
+      {/* Main Upload Card */}
       <div className={styles.card}>
-        {!extractedData ? (
+        {!isProcessing ? (
           <>
             {/* Dropzone */}
-            {!selectedFile ? (
-              <div
-                className={`${styles.dropzone} ${isDragging ? styles.dropzoneActive : ''}`}
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onDrop={handleDrop}
-                onClick={() => fileInputRef.current?.click()}
-              >
-                <div className={styles.dropzoneIconWrapper}>
-                  <Upload size={30} />
-                </div>
-                <p className={styles.dropzonePrompt}>
-                  Click to select or drag and drop your resume file
+            <div
+              className={`${styles.dropzone} ${isDragging ? styles.dragging : ''} ${
+                selectedFile ? styles.hasFile : ''
+              }`}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".pdf,.docx,.doc"
+                style={{ display: 'none' }}
+                onChange={handleFileChange}
+              />
+
+              <div className={styles.dropzoneIconWrapper}>
+                <Upload size={32} />
+              </div>
+
+              <div className={styles.dropzoneContent}>
+                <p className={styles.dropzoneMainText}>
+                  {selectedFile ? 'Change resume file' : 'Drag & drop your resume file here, or click to browse'}
                 </p>
-                <p className={styles.dropzoneSubprompt}>
-                  Supported formats: PDF (.pdf), Word Document (.docx), or legacy Word (.doc) up to 10MB
+                <p className={styles.dropzoneSubText}>
+                  Supports PDF (.pdf), Word (.docx, .doc) &bull; Maximum file size 10MB
                 </p>
-                <div className={styles.supportedFormatsPills}>
-                  <span className={styles.formatBadge}>.pdf</span>
-                  <span className={styles.formatBadge}>.docx</span>
-                  <span className={styles.formatBadge}>.doc</span>
-                </div>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept=".pdf,.docx,.doc,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword"
-                  className={styles.hiddenInput}
-                  onChange={handleFileChange}
-                />
-              </div>
-            ) : (
-              /* Selected File Badge */
-              <div className={styles.fileBadge}>
-                <div className={styles.fileBadgeLeft}>
-                  <div className={`${styles.fileIconBox} ${isDocFormat(selectedFile.name) ? styles.docIconBox : styles.pdfIconBox}`}>
-                    <FileText size={22} />
-                  </div>
-                  <div>
-                    <div className={styles.fileName}>{selectedFile.name}</div>
-                    <div className={styles.fileMeta}>
-                      <span className={styles.fileFormatTag}>{getFileFormat(selectedFile.name)}</span>
-                      <span>{formatFileSize(selectedFile.size)}</span>
-                      <span>•</span>
-                      <span>Ready for parsing</span>
-                    </div>
-                  </div>
-                </div>
-                {!isProcessing && (
-                  <button
-                    type="button"
-                    className={styles.removeBtn}
-                    onClick={() => setSelectedFile(null)}
-                    title="Remove file"
-                  >
-                    <X size={18} />
-                  </button>
-                )}
-              </div>
-            )}
-
-            {/* Processing Progress Steps */}
-            {isProcessing && (
-              <div className={styles.progressContainer}>
-                <div className={styles.progressTitle}>
-                  <Sparkles size={16} style={{ color: 'var(--color-primary)' }} />
-                  <span>Multi-Stage Extraction & Structuring Pipeline</span>
-                </div>
-
-                <div className={styles.stepsList}>
-                  <div
-                    className={`${styles.stepItem} ${
-                      currentStep === 1 ? styles.stepItemActive : currentStep > 1 ? styles.stepItemDone : ''
-                    }`}
-                  >
-                    <div
-                      className={`${styles.stepDot} ${
-                        currentStep === 1 ? styles.stepDotActive : currentStep > 1 ? styles.stepDotDone : ''
-                      }`}
-                    >
-                      {currentStep > 1 ? <CheckCircle2 size={16} /> : '1'}
-                    </div>
-                    <span>Uploading and verifying document format integrity...</span>
-                  </div>
-
-                  <div
-                    className={`${styles.stepItem} ${
-                      currentStep === 2 ? styles.stepItemActive : currentStep > 2 ? styles.stepItemDone : ''
-                    }`}
-                  >
-                    <div
-                      className={`${styles.stepDot} ${
-                        currentStep === 2 ? styles.stepDotActive : currentStep > 2 ? styles.stepDotDone : ''
-                      }`}
-                    >
-                      {currentStep > 2 ? <CheckCircle2 size={16} /> : '2'}
-                    </div>
-                    <span>Extracting text layers with PyMuPDF & Word parser...</span>
-                  </div>
-
-                  <div
-                    className={`${styles.stepItem} ${
-                      currentStep === 3 ? styles.stepItemActive : currentStep > 3 ? styles.stepItemDone : ''
-                    }`}
-                  >
-                    <div
-                      className={`${styles.stepDot} ${
-                        currentStep === 3 ? styles.stepDotActive : currentStep > 3 ? styles.stepDotDone : ''
-                      }`}
-                    >
-                      {currentStep > 3 ? <CheckCircle2 size={16} /> : '3'}
-                    </div>
-                    <span>Gemini AI structuring education, skills, projects, and work experience...</span>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Guidance Callout */}
-            <div className={styles.infoBox}>
-              <Info className={styles.infoIcon} size={18} />
-              <div>
-                <strong>Supported Formats:</strong> Both PDF and Word documents are supported. Scanned image-only documents cannot be parsed. You will be able to review and confirm all extracted fields before opening your resume.
               </div>
             </div>
 
-            {/* Actions */}
-            <div className={styles.actionsRow}>
-              <Link to="/dashboard">
-                <Button variant="ghost" size="md" disabled={isProcessing}>
-                  Cancel
-                </Button>
-              </Link>
+            {/* Selected File Details & Action */}
+            {selectedFile && (
+              <div className={styles.fileSelectedBox}>
+                <div className={styles.fileInfoGroup}>
+                  <div className={styles.fileFormatTag}>{getFileFormat(selectedFile.name)}</div>
+                  <div className={styles.fileMetaText}>
+                    <span className={styles.fileName}>{selectedFile.name}</span>
+                    <span className={styles.fileSize}>{formatFileSize(selectedFile.size)}</span>
+                  </div>
+                </div>
 
+                <button
+                  type="button"
+                  className={styles.removeFileBtn}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedFile(null);
+                  }}
+                  title="Remove selected file"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+            )}
+
+            {/* Submit Action */}
+            <div className={styles.actionRow}>
               <Button
                 variant="primary"
-                size="md"
-                disabled={!selectedFile || isProcessing}
-                isLoading={isProcessing}
-                onClick={handleExtractAndReview}
+                size="lg"
                 icon={Sparkles}
+                disabled={!selectedFile}
+                onClick={handleUploadAndAnalyze}
+                style={{ width: '100%', justifyContent: 'center' }}
               >
-                Extract & Review Resume
+                Upload & View Analytics Now
               </Button>
+            </div>
+
+            {/* Benefits Feature Strip */}
+            <div className={styles.featureStrip}>
+              <div className={styles.featureItem}>
+                <ShieldCheck size={18} className={styles.featureIcon} />
+                <span>Instant ATS Compatibility Score</span>
+              </div>
+              <div className={styles.featureItem}>
+                <TrendingUp size={18} className={styles.featureIcon} />
+                <span>Section-by-Section Strengths</span>
+              </div>
+              <div className={styles.featureItem}>
+                <Zap size={18} className={styles.featureIcon} />
+                <span>Pre-Built AI Improved Version</span>
+              </div>
             </div>
           </>
         ) : (
-          /* =========================================================================
-             EXTRACTION REVIEW STAGE
-             ========================================================================= */
-          <div className={styles.reviewContainer}>
-            {/* Success Banner */}
-            <div className={styles.reviewSuccessBanner}>
-              <div className={styles.successIconCircle}>
-                <CheckCircle2 size={24} />
-              </div>
-              <div>
-                <h3 className={styles.successBannerTitle}>Extraction Successful!</h3>
-                <p className={styles.successBannerSubtitle}>
-                  We extracted structured data from <strong>{extractedData.filename}</strong>. Review the summary below.
-                </p>
-              </div>
+          /* Processing State */
+          <div className={styles.processingState}>
+            <div className={styles.spinnerCircle}>
+              <Sparkles size={36} className={styles.pulseSparkle} />
             </div>
 
-            {/* Title Editor */}
-            <div className={styles.titleEditorCard}>
-              <label className={styles.titleEditorLabel}>Resume Title</label>
-              <input
-                type="text"
-                className={styles.titleEditorInput}
-                value={resumeTitle}
-                onChange={(e) => setResumeTitle(e.target.value)}
-                placeholder="Descriptive resume title..."
-              />
-            </div>
+            <h3 className={styles.processingTitle}>
+              {processingStep === 1 && 'Extracting Resume Content...'}
+              {processingStep === 2 && 'Structuring Data with AI...'}
+              {processingStep === 3 && 'Generating ATS Score & Analytics...'}
+            </h3>
 
-            {/* Section Breakdown Grid */}
-            <div className={styles.reviewGrid}>
-              {/* Personal Info */}
-              <div className={styles.reviewCard}>
-                <div className={styles.reviewCardHeader}>
-                  <span className={styles.reviewCardTitle}>
-                    <User size={15} color="var(--color-primary)" />
-                    Personal Details
-                  </span>
-                  <span className={styles.reviewCountBadge}>
-                    {extractedData.parsed_content?.personal_info?.full_name ? 'Identified' : 'Blank'}
-                  </span>
-                </div>
-                <div className={styles.reviewCardBody}>
-                  <div>
-                    <strong>Name:</strong> {extractedData.parsed_content?.personal_info?.full_name || 'Not detected'}
-                  </div>
-                  <div>
-                    <strong>Email:</strong> {extractedData.parsed_content?.personal_info?.email || 'Not detected'}
-                  </div>
-                  <div>
-                    <strong>Phone:</strong> {extractedData.parsed_content?.personal_info?.phone || 'Not detected'}
-                  </div>
-                  <div>
-                    <strong>Location:</strong>{' '}
-                    {[
-                      extractedData.parsed_content?.personal_info?.city,
-                      extractedData.parsed_content?.personal_info?.state,
-                    ].filter(Boolean).join(', ') || 'Not detected'}
-                  </div>
-                </div>
+            <p className={styles.processingDesc}>
+              Parsing sections, evaluating readability, and computing role alignment benchmarks.
+            </p>
+
+            <div className={styles.stepIndicators}>
+              <div className={`${styles.stepDot} ${processingStep >= 1 ? styles.activeDot : ''}`}>
+                <span className={styles.dotCircle}>1</span>
+                <span>Upload & Parse</span>
               </div>
-
-              {/* Professional Summary */}
-              <div className={styles.reviewCard}>
-                <div className={styles.reviewCardHeader}>
-                  <span className={styles.reviewCardTitle}>
-                    <FileText size={15} color="var(--color-primary)" />
-                    Professional Summary
-                  </span>
-                  <span className={styles.reviewCountBadge}>
-                    {extractedData.parsed_content?.professional_summary?.content ? 'Found' : 'Empty'}
-                  </span>
-                </div>
-                <div className={styles.reviewCardBody}>
-                  <p style={{ margin: 0, fontStyle: 'italic', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                    {extractedData.parsed_content?.professional_summary?.content || '(No summary text detected in document)'}
-                  </p>
-                  <div>
-                    <strong>Target Role:</strong> {extractedData.parsed_content?.professional_summary?.target_role || 'General'}
-                  </div>
-                </div>
+              <div className={styles.stepLine} />
+              <div className={`${styles.stepDot} ${processingStep >= 2 ? styles.activeDot : ''}`}>
+                <span className={styles.dotCircle}>2</span>
+                <span>AI Structuring</span>
               </div>
-
-              {/* Education */}
-              <div className={styles.reviewCard}>
-                <div className={styles.reviewCardHeader}>
-                  <span className={styles.reviewCardTitle}>
-                    <GraduationCap size={15} color="var(--color-primary)" />
-                    Education
-                  </span>
-                  <span className={styles.reviewCountBadge}>
-                    {extractedData.parsed_content?.education?.length || 0} Records
-                  </span>
-                </div>
-                <div className={styles.reviewCardBody}>
-                  {extractedData.parsed_content?.education?.length > 0 ? (
-                    <ul className={styles.reviewItemList}>
-                      {extractedData.parsed_content.education.map((edu, i) => (
-                        <li key={i} className={styles.reviewItem}>
-                          <span>•</span>
-                          <span>{edu.degree || 'Degree'} – {edu.institution || 'University'}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <span>No education records detected.</span>
-                  )}
-                </div>
+              <div className={styles.stepLine} />
+              <div className={`${styles.stepDot} ${processingStep >= 3 ? styles.activeDot : ''}`}>
+                <span className={styles.dotCircle}>3</span>
+                <span>Dashboard</span>
               </div>
-
-              {/* Technical Skills */}
-              <div className={styles.reviewCard}>
-                <div className={styles.reviewCardHeader}>
-                  <span className={styles.reviewCardTitle}>
-                    <Code2 size={15} color="var(--color-primary)" />
-                    Skills & Categories
-                  </span>
-                  <span className={styles.reviewCountBadge}>
-                    {(extractedData.parsed_content?.skills || []).reduce((acc, c) => acc + (c.items?.length || 0), 0)} Skills
-                  </span>
-                </div>
-                <div className={styles.reviewCardBody}>
-                  {extractedData.parsed_content?.skills?.length > 0 ? (
-                    <div className={styles.reviewTagsContainer}>
-                      {extractedData.parsed_content.skills.flatMap((cat) => cat.items || []).slice(0, 12).map((skill, i) => (
-                        <span key={i} className={styles.reviewTag}>
-                          {skill}
-                        </span>
-                      ))}
-                      {(extractedData.parsed_content.skills.flatMap((cat) => cat.items || []).length > 12) && (
-                        <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
-                          +{extractedData.parsed_content.skills.flatMap((cat) => cat.items || []).length - 12} more
-                        </span>
-                      )}
-                    </div>
-                  ) : (
-                    <span>No skills categorized.</span>
-                  )}
-                </div>
-              </div>
-
-              {/* Projects */}
-              <div className={styles.reviewCard}>
-                <div className={styles.reviewCardHeader}>
-                  <span className={styles.reviewCardTitle}>
-                    <FolderGit2 size={15} color="var(--color-primary)" />
-                    Projects
-                  </span>
-                  <span className={styles.reviewCountBadge}>
-                    {extractedData.parsed_content?.projects?.length || 0} Projects
-                  </span>
-                </div>
-                <div className={styles.reviewCardBody}>
-                  {extractedData.parsed_content?.projects?.length > 0 ? (
-                    <ul className={styles.reviewItemList}>
-                      {extractedData.parsed_content.projects.map((proj, i) => (
-                        <li key={i} className={styles.reviewItem}>
-                          <span>•</span>
-                          <span>{proj.name || `Project #${i + 1}`}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <span>No projects detected.</span>
-                  )}
-                </div>
-              </div>
-
-              {/* Experience */}
-              <div className={styles.reviewCard}>
-                <div className={styles.reviewCardHeader}>
-                  <span className={styles.reviewCardTitle}>
-                    <Briefcase size={15} color="var(--color-primary)" />
-                    Work Experience
-                  </span>
-                  <span className={styles.reviewCountBadge}>
-                    {(extractedData.parsed_content?.work_experience?.length || 0) +
-                      (extractedData.parsed_content?.internships?.length || 0)} Roles
-                  </span>
-                </div>
-                <div className={styles.reviewCardBody}>
-                  {(extractedData.parsed_content?.work_experience?.length > 0 ||
-                    extractedData.parsed_content?.internships?.length > 0) ? (
-                    <ul className={styles.reviewItemList}>
-                      {extractedData.parsed_content.work_experience?.map((exp, i) => (
-                        <li key={`exp-${i}`} className={styles.reviewItem}>
-                          <span>•</span>
-                          <span>{exp.job_title} at {exp.company_name}</span>
-                        </li>
-                      ))}
-                      {extractedData.parsed_content.internships?.map((intern, i) => (
-                        <li key={`int-${i}`} className={styles.reviewItem}>
-                          <span>•</span>
-                          <span>{intern.position} at {intern.organization} (Intern)</span>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <span>No employment history detected.</span>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Actions for Review */}
-            <div className={styles.actionsRow}>
-              <Button
-                variant="outline"
-                size="md"
-                onClick={handleReset}
-                icon={RotateCcw}
-                disabled={isFinalizing}
-              >
-                Upload Different Document
-              </Button>
-
-              <Button
-                variant="primary"
-                size="md"
-                isLoading={isFinalizing}
-                onClick={handleConfirmAndCreate}
-                icon={ArrowRight}
-              >
-                Confirm & Open in Resume Editor
-              </Button>
             </div>
           </div>
         )}

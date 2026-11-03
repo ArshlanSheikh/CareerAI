@@ -425,6 +425,18 @@ export default function ResumeEditorPage() {
             Save
           </Button>
 
+          {/* Re-Analyze Button */}
+          <Button
+            variant="secondary"
+            size="sm"
+            icon={RefreshCw}
+            isLoading={isAnalyzing}
+            onClick={handleRunAnalysis}
+            title="Save edits and re-run AI ATS analysis"
+          >
+            Re-Analyze
+          </Button>
+
           {/* Version History Button */}
           <Button
             variant="outline"
@@ -449,11 +461,11 @@ export default function ResumeEditorPage() {
                 background: 'var(--primary-50)',
               }}
             >
-              {latestAnalysis?.ats_compatibility_score != null
-                ? `ATS: ${latestAnalysis.ats_compatibility_score}%`
-                : resume.ats_score != null
-                ? `ATS: ${resume.ats_score}%`
-                : 'AI Analysis'}
+              {latestAnalysis?.overall_score != null
+                ? `Score: ${latestAnalysis.overall_score}%`
+                : resume.overall_score != null
+                ? `Score: ${resume.overall_score}%`
+                : 'Analytics'}
             </Button>
           </Link>
 
