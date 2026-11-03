@@ -694,37 +694,41 @@ export default function ResumeEditorPage() {
 
               {latestAnalysis.weaknesses && latestAnalysis.weaknesses.length > 0 ? (
                 <div className={styles.weaknessGrid}>
-                  {latestAnalysis.weaknesses.slice(0, 4).map((w, idx) => (
-                    <div key={idx} className={styles.weaknessCard}>
-                      <div className={styles.weaknessTop}>
-                        <span
-                          className={`${styles.severityBadge} ${
-                            w.severity === 'critical'
-                              ? styles.badgeCritical
-                              : w.severity === 'warning'
-                              ? styles.badgeWarning
-                              : styles.badgeSuggestion
-                          }`}
+                  {latestAnalysis.weaknesses.slice(0, 4).map((w, idx) => {
+                    const title = typeof w === 'object' ? (w?.title || 'Potential Improvement') : 'Improvement';
+                    const desc = typeof w === 'object' ? (w?.recommendation || w?.description || '') : String(w);
+                    const severity = typeof w === 'object' ? (w?.severity || 'suggestion') : 'suggestion';
+                    const section = typeof w === 'object' ? (w?.section || 'General') : 'General';
+                    return (
+                      <div key={idx} className={styles.weaknessCard}>
+                        <div className={styles.weaknessTop}>
+                          <span
+                            className={`${styles.severityBadge} ${
+                              severity === 'critical'
+                                ? styles.badgeCritical
+                                : severity === 'warning'
+                                ? styles.badgeWarning
+                                : styles.badgeSuggestion
+                            }`}
+                          >
+                            {severity}
+                          </span>
+                          <span className={styles.weaknessSection}>{section}</span>
+                        </div>
+                        <div className={styles.weaknessTitle}>{title}</div>
+                        <p className={styles.weaknessDesc}>{desc}</p>
+                        <button
+                          type="button"
+                          className={styles.oneClickFixBtn}
+                          onClick={() => handleFixSection(section)}
                         >
-                          {w.severity || 'suggestion'}
-                        </span>
-                        <span className={styles.weaknessSection}>{w.section || 'General'}</span>
+                          <Zap size={13} />
+                          <span>1-Click AI Fix</span>
+                          <ArrowRight size={12} />
+                        </button>
                       </div>
-                      <div className={styles.weaknessTitle}>{w.title || 'Potential Improvement'}</div>
-                      <p className={styles.weaknessDesc}>
-                        {w.recommendation || w.description || ''}
-                      </p>
-                      <button
-                        type="button"
-                        className={styles.oneClickFixBtn}
-                        onClick={() => handleFixSection(w.section)}
-                      >
-                        <Zap size={13} />
-                        <span>1-Click AI Fix</span>
-                        <ArrowRight size={12} />
-                      </button>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               ) : (
                 <div className={styles.emptyWeaknessState}>

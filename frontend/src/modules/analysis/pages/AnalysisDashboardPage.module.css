@@ -464,6 +464,19 @@
   margin-top: 2px;
 }
 
+.strengthTextWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  line-height: 1.45;
+}
+
+.strengthTitle {
+  font-size: 0.8125rem;
+  color: var(--success-900);
+  font-weight: 700;
+}
+
 .strengthText {
   font-size: 0.8125rem;
   color: var(--slate-800);

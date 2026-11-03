@@ -510,12 +510,19 @@ export default function AnalysisDashboardPage() {
             </div>
 
             <div className={styles.strengthsList}>
-              {strengths.map((s, idx) => (
-                <div key={idx} className={styles.strengthItem}>
-                  <CheckCircle2 size={16} className={styles.strengthCheckIcon} />
-                  <span className={styles.strengthText}>{s}</span>
-                </div>
-              ))}
+              {strengths.map((s, idx) => {
+                const title = typeof s === 'object' ? s?.title : '';
+                const desc = typeof s === 'object' ? (s?.description || s?.title) : s;
+                return (
+                  <div key={idx} className={styles.strengthItem}>
+                    <CheckCircle2 size={16} className={styles.strengthCheckIcon} />
+                    <div className={styles.strengthTextWrap}>
+                      {title && <strong className={styles.strengthTitle}>{title}: </strong>}
+                      <span className={styles.strengthText}>{desc}</span>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
@@ -533,37 +540,41 @@ export default function AnalysisDashboardPage() {
 
             {weaknesses.length > 0 ? (
               <div className={styles.recList}>
-                {weaknesses.map((w, idx) => (
-                  <div key={idx} className={styles.recCard}>
-                    <div className={styles.recTop}>
-                      <span
-                        className={`${styles.severityTag} ${
-                          w.severity === 'critical'
-                            ? styles.sevCritical
-                            : w.severity === 'warning'
-                            ? styles.sevWarning
-                            : styles.sevSuggestion
-                        }`}
+                {weaknesses.map((w, idx) => {
+                  const title = typeof w === 'object' ? (w?.title || 'Optimization Opportunity') : 'Improvement';
+                  const text = typeof w === 'object' ? (w?.recommendation || w?.description || '') : String(w);
+                  const severity = typeof w === 'object' ? (w?.severity || 'suggestion') : 'suggestion';
+                  const section = typeof w === 'object' ? (w?.section || 'General') : 'General';
+                  return (
+                    <div key={idx} className={styles.recCard}>
+                      <div className={styles.recTop}>
+                        <span
+                          className={`${styles.severityTag} ${
+                            severity === 'critical'
+                              ? styles.sevCritical
+                              : severity === 'warning'
+                              ? styles.sevWarning
+                              : styles.sevSuggestion
+                          }`}
+                        >
+                          {severity}
+                        </span>
+                        <span className={styles.recSection}>{section}</span>
+                      </div>
+
+                      <h4 className={styles.recTitle}>{title}</h4>
+                      <p className={styles.recText}>{text}</p>
+
+                      <Link
+                        to={`/resumes/${resumeId}/edit`}
+                        className={styles.fixInEditorLink}
                       >
-                        {w.severity || 'suggestion'}
-                      </span>
-                      <span className={styles.recSection}>{w.section || 'General'}</span>
+                        <span>Fix in Editor</span>
+                        <ArrowRight size={13} />
+                      </Link>
                     </div>
-
-                    <h4 className={styles.recTitle}>{w.title || 'Optimization Opportunity'}</h4>
-                    <p className={styles.recText}>
-                      {w.recommendation || w.description}
-                    </p>
-
-                    <Link
-                      to={`/resumes/${resumeId}/edit`}
-                      className={styles.fixInEditorLink}
-                    >
-                      <span>Fix in Editor</span>
-                      <ArrowRight size={13} />
-                    </Link>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             ) : (
               <div className={styles.emptyRecState}>
