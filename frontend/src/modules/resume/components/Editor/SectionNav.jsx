@@ -77,6 +77,35 @@ export default function SectionNav({
     }
   };
 
+  const getSectionStatus = (key) => {
+    switch (key) {
+      case 'summary':
+        const sum = content?.professional_summary?.content || '';
+        if (!sum.trim()) return { label: 'Empty', type: 'warning' };
+        if (sum.trim().split(/\s+/).length < 15) return { label: 'Brief', type: 'suggestion' };
+        return { label: 'Ready', type: 'success' };
+      case 'skills':
+        const count = content?.skills?.reduce((acc, cat) => acc + (cat.items?.length || 0), 0) || 0;
+        if (count === 0) return { label: 'Empty', type: 'warning' };
+        if (count < 5) return { label: 'Add More', type: 'suggestion' };
+        return { label: 'Good', type: 'success' };
+      case 'projects':
+        const projs = content?.projects || [];
+        if (projs.length === 0) return { label: 'Empty', type: 'warning' };
+        const hasBullets = projs.some(p => p.key_contributions?.length > 0 || p.personally_implemented_features?.length > 0);
+        if (!hasBullets) return { label: 'Need Bullets', type: 'suggestion' };
+        return { label: 'Good', type: 'success' };
+      case 'experience':
+        const exps = content?.work_experience || [];
+        if (exps.length === 0) return null;
+        const expBullets = exps.some(e => e.responsibilities?.length > 0);
+        if (!expBullets) return { label: 'Need Bullets', type: 'suggestion' };
+        return { label: 'Good', type: 'success' };
+      default:
+        return null;
+    }
+  };
+
   return (
     <aside className={styles.navContainer}>
       <div className={styles.navHeader}>Resume Sections</div>
@@ -101,6 +130,7 @@ export default function SectionNav({
         const isHidden = hiddenSections.has(sectionKey);
         const isActive = activeSection === sectionKey;
         const count = getSectionCount(sectionKey);
+        const status = getSectionStatus(sectionKey);
 
         return (
           <div
@@ -118,6 +148,11 @@ export default function SectionNav({
               {count > 0 && (
                 <span className={`${styles.countBadge} ${isActive ? styles.activeBadge : ''}`}>
                   {count}
+                </span>
+              )}
+              {status && (
+                <span className={`${styles.statusPill} ${styles[`status_${status.type}`]}`}>
+                  {status.label}
                 </span>
               )}
             </div>

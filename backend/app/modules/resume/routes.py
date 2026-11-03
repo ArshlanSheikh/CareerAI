@@ -51,6 +51,12 @@ def import_resume():
     return ResumeController.import_resume()
 
 
+@resume_bp.route("/extract-preview", methods=["POST"])
+@jwt_required()
+def extract_preview():
+    return ResumeController.extract_preview()
+
+
 @resume_bp.route("/<resume_id>/pdf", methods=["GET"])
 @jwt_required()
 def download_pdf(resume_id: str):

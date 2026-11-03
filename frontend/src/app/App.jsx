@@ -12,6 +12,8 @@ import DashboardPage from '../modules/dashboard/pages/DashboardPage';
 import ResumeEditorPage from '../modules/resume/pages/ResumeEditorPage';
 import ResumePreviewPage from '../modules/resume/pages/ResumePreviewPage';
 import ResumeImportPage from '../modules/resume/pages/ResumeImportPage';
+import AnalysisDashboardPage from '../modules/analysis/pages/AnalysisDashboardPage';
+import ResumeComparePage from '../modules/enhancement/pages/ResumeComparePage';
 import Card from '../components/common/Card/Card';
 import Button from '../components/common/Button/Button';
 import { Link } from 'react-router-dom';
@@ -28,6 +30,8 @@ function AuthenticatedAppWrapper() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/resumes/:id/edit" element={<ResumeEditorPage />} />
         <Route path="/resumes/:id/preview" element={<ResumePreviewPage />} />
+        <Route path="/resumes/:id/analysis" element={<AnalysisDashboardPage />} />
+        <Route path="/resumes/:id/enhance" element={<ResumeComparePage />} />
         <Route path="/resumes/import" element={<ResumeImportPage />} />
       </Route>
 

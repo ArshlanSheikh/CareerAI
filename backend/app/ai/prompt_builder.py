@@ -182,6 +182,120 @@ JSON RESPONSE SCHEMA:
         return prompt.strip()
 
     @staticmethod
+    def build_resume_analysis_prompt(resume_content: dict, target_role: str = "") -> str:
+        prompt = f"""
+TASK: Perform a rigorous, holistic, and constructive AI Resume Analysis for a student / job applicant.
+Evaluate the resume objectively according to modern recruitment standards, tech industry benchmarks, and ATS scanner compatibility.
+
+TARGET ROLE: {target_role or resume_content.get('professional_summary', {}).get('target_role') or 'Software Engineer / Technology Role'}
+
+RESUME DATA TO ANALYZE:
+{json.dumps(resume_content, indent=2)}
+
+SCORING CRITERIA:
+1. Overall Resume Score (0-100): Composite rating balancing clarity, technical skills, project depth, experience impact, and structural completeness.
+2. ATS Compatibility Score (0-100): Estimation of machine readability, standard headings, parseable formatting, and keyword density. Note: Strictly an estimate.
+3. Content Quality & Readability (0-100): Professional vocabulary, elimination of grammatical weaknesses, sentence length, and active voice.
+4. Section-by-Section Ratings:
+   - Summary: Does it clearly convey the candidate's target role, technical foundations, and career focus in 2-4 tight sentences?
+   - Skills: Are technologies organized logically into standard categories? Are industry-standard tools present?
+   - Education: Are degrees, majors, institutions, and graduation years clear?
+   - Projects: Do projects highlight architecture and individual technical contributions using active verbs? Are bullets specific?
+   - Experience: Are responsibilities framed with deliverables and metrics where available without inventing numbers?
+5. 5 Quality Dimensions (Radar Chart 0-100):
+   - Impact & Action Verbs
+   - Quantification & Metrics
+   - ATS Formatting
+   - Technical Depth
+   - Completeness & Structure
+6. Identify 3 to 5 clear Strengths.
+7. Identify 3 to 6 genuine Weaknesses categorized as 'critical', 'warning', or 'suggestion'.
+8. Provide 3 to 5 Actionable Recommendations with estimated score impact.
+
+CRITICAL INTEGRITY:
+- Base analysis ONLY on the candidate's actual provided data.
+- NEVER penalize candidates for not fabricating unearned metrics; instead advise them on how to truthfully measure their work.
+
+REQUIRED JSON RESPONSE SCHEMA:
+{{
+  "overall_score": 78,
+  "ats_compatibility_score": 82,
+  "content_quality_score": 75,
+  "readability_score": 80,
+  "summary_score": 70,
+  "skills_score": 85,
+  "education_score": 90,
+  "projects_score": 74,
+  "experience_score": 72,
+  "section_scores": {{
+    "summary": {{
+      "score": 70,
+      "feedback": "Concise summary but lacks explicit alignment with backend cloud technologies.",
+      "strengths": ["Clear role targeting", "Professional tone"],
+      "improvements": ["Add 1-2 primary technical frameworks"]
+    }},
+    "skills": {{
+      "score": 85,
+      "feedback": "Strong categorization across programming languages and frameworks.",
+      "found_skills": ["Python", "React", "MongoDB"],
+      "recommended_keywords": ["REST APIs", "Docker", "Git"]
+    }},
+    "education": {{
+      "score": 90,
+      "feedback": "Degree, major, institution, and graduation year are well formatted.",
+      "status": "Complete"
+    }},
+    "projects": {{
+      "score": 74,
+      "feedback": "Good variety of full-stack projects; bullet points can be strengthened using XYZ formula.",
+      "tech_depth_score": 78,
+      "impact_score": 70
+    }},
+    "experience": {{
+      "score": 72,
+      "feedback": "Internship experience is valuable; convert passive sentences to strong action verbs.",
+      "action_verbs_score": 70,
+      "quantification_score": 65
+    }}
+  }},
+  "quality_dimensions": [
+    {{ "dimension": "Impact & Action Verbs", "score": 72, "benchmark": 85 }},
+    {{ "dimension": "Quantification & Metrics", "score": 65, "benchmark": 75 }},
+    {{ "dimension": "ATS Formatting", "score": 88, "benchmark": 90 }},
+    {{ "dimension": "Technical Depth", "score": 80, "benchmark": 80 }},
+    {{ "dimension": "Completeness & Structure", "score": 85, "benchmark": 85 }}
+  ],
+  "strengths": [
+    {{
+      "title": "Strong Technical Stack Organization",
+      "description": "Skills are separated into clear categories which improves recruiter scanning.",
+      "section": "skills"
+    }}
+  ],
+  "weaknesses": [
+    {{
+      "title": "Unquantified Project Deliverables",
+      "description": "Project bullet points describe features without indicating scale, active users, or throughput.",
+      "severity": "warning",
+      "section": "projects"
+    }}
+  ],
+  "actionable_recommendations": [
+    {{
+      "id": "REC_1",
+      "title": "Revamp Project Bullet Points with XYZ Formula",
+      "description": "Start each bullet with an active verb (e.g., Engineered, Architected) and state technical outcome.",
+      "section": "projects",
+      "priority": "high",
+      "estimated_score_boost": 6
+    }}
+  ],
+  "disclaimer": "ATS compatibility score is an estimation based on layout readability and keyword alignment. It is not a guarantee of passing automated screening or job selection."
+}}
+"""
+        return prompt.strip()
+
+    @staticmethod
     def build_pdf_extraction_prompt(raw_text: str) -> str:
         prompt = f"""
 TASK: Convert the following raw extracted resume text into the CareerAI standardized resume JSON schema.
@@ -304,5 +418,75 @@ REQUIRED JSON RESPONSE SCHEMA:
 }}
 """
         return prompt.strip()
+
+    @staticmethod
+    def build_resume_enhancement_prompt(
+        resume_content: dict,
+        target_role: str = "",
+        analysis_weaknesses: list = None,
+        custom_instructions: str = "",
+    ) -> str:
+        weaknesses_str = ""
+        if analysis_weaknesses:
+            weaknesses_str = "\n".join([f"- {w}" for w in analysis_weaknesses[:8]])
+
+        prompt = f"""
+TASK: Generate a comprehensive, professional, AI-improved version of the applicant's resume.
+
+TARGET ROLE: {target_role or "Software Engineering / Tech Professional"}
+USER CUSTOM INSTRUCTIONS: {custom_instructions or "Elevate professional tone, strengthen action verbs, optimize for ATS keyword parsing, and improve impact clarity."}
+
+DIAGNOSTIC WEAKNESSES TO REMEDY:
+{weaknesses_str or "- General content polish, stronger action verbs, and improved impact articulation."}
+
+CURRENT RESUME CONTENT (JSON):
+```json
+{json.dumps(resume_content, indent=2)}
+```
+
+STRICT ANTI-HALLUCINATION & ENHANCEMENT RULES:
+1. NEVER invent employers, job titles, educational institutions, degrees, certifications, or project names.
+2. NEVER invent technologies, programming languages, or tools not present or directly implied in the original.
+3. NEVER invent fake statistics, revenue numbers, or fabricated percentages. If a bullet lacks numbers, do NOT add made-up figures like "increased sales by 85%". Instead, elevate the action verb, clarify the mechanism, and highlight the technical outcome (e.g. "Engineered modular REST APIs using FastAPI, enhancing response reliability and streamlining cross-service communication").
+4. PROFESSIONAL SUMMARY: Rewrite into a compelling 2 to 4 sentence executive hook clearly aligned with the target role.
+5. WORK EXPERIENCE & PROJECTS: Rewrite responsibilities and contributions into punchy, active-voice bullet points beginning with strong past-tense action verbs (e.g. Architected, Spearheaded, Implemented, Streamlined, Refactored, Deployed).
+6. SKILLS: Preserve all verified skills while categorizing them into logical technical groups (e.g. Languages, Frameworks, Developer Tools, Databases).
+7. Return a complete, valid improved resume JSON conforming to the standardized schema, plus an itemized section diff explaining the changes made.
+
+JSON RESPONSE SCHEMA:
+{{
+  "enhancement_summary": "2-3 sentence overview of the structural and phrasing enhancements applied",
+  "estimated_score_improvement": 15,
+  "improved_content": {json.dumps(resume_content)},
+  "section_diffs": [
+    {{
+      "section": "professional_summary",
+      "title": "Professional Summary",
+      "change_summary": ["1-3 bullet points describing what was improved"],
+      "impact": "high"
+    }},
+    {{
+      "section": "skills",
+      "title": "Technical Skills",
+      "change_summary": ["Bullet points describing categorization or standardization"],
+      "impact": "medium"
+    }},
+    {{
+      "section": "projects",
+      "title": "Projects",
+      "change_summary": ["Bullet points describing enhanced action verbs and clarity"],
+      "impact": "high"
+    }},
+    {{
+      "section": "experience",
+      "title": "Experience",
+      "change_summary": ["Bullet points describing improved bullet formulations"],
+      "impact": "high"
+    }}
+  ]
+}}
+"""
+        return prompt.strip()
+
 
 

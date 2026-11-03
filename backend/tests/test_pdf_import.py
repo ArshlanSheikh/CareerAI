@@ -56,6 +56,8 @@ class PdfImportTestCase(unittest.TestCase):
         cls.app = create_app("development")
         cls.client = cls.app.test_client()
         cls.db = get_db()
+        cls.db.users.delete_many({"email": {"$regex": "@test-pdf-import.com$"}})
+        cls.db.resumes.delete_many({"title": {"$regex": "Imported"}})
 
     @classmethod
     def tearDownClass(cls):

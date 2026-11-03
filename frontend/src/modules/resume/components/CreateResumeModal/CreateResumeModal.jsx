@@ -120,7 +120,7 @@ export default function CreateResumeModal({ isOpen, onClose, onCreated }) {
             onClick={() => setActiveMode('import')}
           >
             <Upload size={16} />
-            <span>Import Existing PDF</span>
+            <span>Import Resume (PDF / Word)</span>
           </button>
         </div>
 
@@ -201,10 +201,10 @@ export default function CreateResumeModal({ isOpen, onClose, onCreated }) {
             </div>
             <div>
               <h4 style={{ fontSize: '1.05rem', fontWeight: 700, margin: '0 0 0.35rem 0', color: 'var(--color-text-primary)' }}>
-                Import Your Existing PDF Resume
+                Import Your Existing Resume (PDF or Word)
               </h4>
               <p style={{ fontSize: '0.8125rem', color: 'var(--color-text-secondary)', margin: 0, maxWidth: 380, lineHeight: 1.5 }}>
-                PyMuPDF extracts raw text and Google Gemini structures it automatically into ATS-compliant sections.
+                PyMuPDF and Word extraction engines parse raw layout data, and Google Gemini structures it into standardized resume sections.
               </p>
             </div>
             <Button
@@ -216,7 +216,7 @@ export default function CreateResumeModal({ isOpen, onClose, onCreated }) {
                 navigate('/resumes/import');
               }}
             >
-              Open PDF Importer
+              Open Resume Importer
             </Button>
           </div>
         )}

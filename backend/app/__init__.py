@@ -131,12 +131,16 @@ def create_app(config_name=None):
     from .modules.resume.routes import resume_bp
     from .modules.ai.routes import ai_bp
     from .modules.versions.routes import versions_bp
+    from .modules.analysis.routes import analysis_bp
+    from .modules.enhancement.routes import enhancement_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(profile_bp)
     app.register_blueprint(resume_bp)
     app.register_blueprint(ai_bp)
     app.register_blueprint(versions_bp)
+    app.register_blueprint(analysis_bp)
+    app.register_blueprint(enhancement_bp)
 
     return app
 

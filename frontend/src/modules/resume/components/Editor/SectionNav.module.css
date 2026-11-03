@@ -107,6 +107,30 @@
   border-color: var(--primary-200);
 }
 
+.statusPill {
+  font-size: 0.625rem;
+  font-weight: 700;
+  padding: 0.1rem 0.35rem;
+  border-radius: var(--radius-full);
+  margin-left: 0.35rem;
+  text-transform: capitalize;
+}
+
+.status_warning {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.status_suggestion {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.status_success {
+  background: #dcfce7;
+  color: #15803d;
+}
+
 .itemControls {
   display: flex;
   align-items: center;

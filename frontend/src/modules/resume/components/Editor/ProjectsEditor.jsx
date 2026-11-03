@@ -86,6 +86,24 @@ export default function ProjectsEditor({ list = [], onChange, onTriggerAi }) {
         </Button>
       </div>
 
+      <div style={{
+        marginBottom: '1rem',
+        padding: '0.65rem 0.9rem',
+        borderRadius: 'var(--radius-lg)',
+        background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%)',
+        border: '1px solid rgba(99, 102, 241, 0.15)',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.5rem',
+        fontSize: '0.785rem',
+        color: 'var(--slate-700)',
+      }}>
+        <Sparkles size={15} color="var(--primary-600)" style={{ flexShrink: 0 }} />
+        <div>
+          <strong>XYZ Formula Tip:</strong> Describe what you accomplished [X], measured by metric [Y], by doing [Z] (e.g. "Architected REST endpoints reducing latency by 35% via Redis caching").
+        </div>
+      </div>
+
       {list.length === 0 ? (
         <div className={s.emptyStateCard}>
           <div className={s.emptyIconCircle}>

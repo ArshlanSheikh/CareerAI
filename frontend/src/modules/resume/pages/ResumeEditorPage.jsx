@@ -331,6 +331,23 @@ export default function ResumeEditorPage() {
             v{resume.current_version || 1} History
           </Button>
 
+          {/* AI Analysis Dashboard Button */}
+          <Link to={`/resumes/${resume.id}/analysis`}>
+            <Button
+              variant="outline"
+              size="sm"
+              icon={Sparkles}
+              title="Open AI ATS & Content Analysis Dashboard"
+              style={{
+                borderColor: 'var(--primary-300)',
+                color: 'var(--primary-700)',
+                background: 'var(--primary-50)',
+              }}
+            >
+              {resume.ats_score ? `AI Score: ${resume.ats_score}` : 'AI Analysis'}
+            </Button>
+          </Link>
+
           {/* Full Preview & Download */}
           <Link to={`/resumes/${resume.id}/preview`}>
             <Button variant="outline" size="sm" icon={Eye}>

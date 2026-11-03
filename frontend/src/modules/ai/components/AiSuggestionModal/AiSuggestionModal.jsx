@@ -29,6 +29,22 @@ export default function AiSuggestionModal({
   const [customInstructions, setCustomInstructions] = useState('');
   const [actionLoading, setActionLoading] = useState(false);
 
+  const QUICK_PROMPTS = [
+    { label: 'Rewrite Professionally', prompt: 'Rewrite with elevated professional vocabulary and executive tone.' },
+    { label: 'Fix Grammar & Flow', prompt: 'Eliminate passive voice, fix grammatical inconsistencies, and improve sentence flow.' },
+    { label: 'Improve Impact (XYZ)', prompt: 'Restructure using Google XYZ formula highlighting measurable results and active verbs.' },
+    { label: 'Technical Depth', prompt: 'Emphasize architectural details, tooling, and specific technical implementation scope.' },
+    { label: 'Make Concise', prompt: 'Make phrasing tight, concise, and punchy without losing key achievements.' },
+    { label: 'Alternative Version', prompt: 'Provide an alternative creative phrasing angle with different action verbs.' },
+  ];
+
+  const handleQuickPrompt = (promptText) => {
+    setCustomInstructions(promptText);
+    if (onRegenerate) {
+      onRegenerate(promptText);
+    }
+  };
+
   // Sync editedText whenever suggestion changes
   useEffect(() => {
     if (suggestion?.suggested_content) {
@@ -299,8 +315,21 @@ export default function AiSuggestionModal({
               {/* Request Revision Form */}
               <div className={styles.revisionSection}>
                 <label className={styles.revisionLabel}>
-                  Need adjustments? Give custom instructions:
+                  Quick AI Assistance Modes:
                 </label>
+                <div className={styles.quickPromptRow}>
+                  {QUICK_PROMPTS.map((qp, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      className={styles.quickPromptBtn}
+                      disabled={isLoading || actionLoading}
+                      onClick={() => handleQuickPrompt(qp.prompt)}
+                    >
+                      {qp.label}
+                    </button>
+                  ))}
+                </div>
                 <div className={styles.revisionInputRow}>
                   <input
                     type="text"

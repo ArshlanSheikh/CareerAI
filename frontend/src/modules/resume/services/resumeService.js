@@ -40,6 +40,23 @@ export const resumeService = {
     return response.data;
   },
 
+  async extractResumePreview(formData) {
+    const response = await api.post('/resumes/extract-preview', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  },
+
+  async importFromConfirmed(title, confirmedContent) {
+    const response = await api.post('/resumes/import', {
+      title,
+      confirmed_content: confirmedContent,
+    });
+    return response.data;
+  },
+
   async downloadPdf(id, filename = 'Resume.pdf') {
     const blob = await api.get(`/resumes/${id}/pdf`, {
       responseType: 'blob',

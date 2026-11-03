@@ -78,7 +78,7 @@ class ResumeController:
         )
 
     @staticmethod
-    def import_resume():
+    def extract_preview():
         from flask import request
         user_id = get_jwt_identity()
 
@@ -87,21 +87,90 @@ class ResumeController:
 
         file = request.files["file"]
         if not file or file.filename == "":
-            return error_response(message="No file selected for import", status_code=400)
+            return error_response(message="No file selected for extraction", status_code=400)
 
         filename = file.filename
-        if not filename.lower().endswith(".pdf"):
-            return error_response(message="Only PDF files are supported for resume import", status_code=400)
+        allowed_extensions = {".pdf", ".docx", ".doc"}
+        ext = "." + filename.rsplit(".", 1)[-1].lower() if "." in filename else ""
+        if ext not in allowed_extensions:
+            return error_response(
+                message=f"Unsupported file format '{ext}'. Allowed formats: PDF (.pdf), Word Document (.docx), and Word (.doc)",
+                status_code=400,
+            )
 
         file_bytes = file.read()
         if len(file_bytes) == 0:
-            return error_response(message="The uploaded PDF file is empty", status_code=400)
+            return error_response(message="The uploaded document is empty", status_code=400)
 
         if len(file_bytes) > 10 * 1024 * 1024:
             return error_response(message="File size exceeds maximum allowed 10MB limit", status_code=400)
 
         try:
-            resume, err = ResumeService.import_from_pdf(user_id, file_bytes, filename)
+            preview_data, err = ResumeService.extract_preview(user_id, file_bytes, filename)
+            if err:
+                return error_response(message=err, status_code=400)
+            return success_response(
+                data=preview_data,
+                message="Resume extracted and structured for review",
+                status_code=200,
+            )
+        except ValueError as ve:
+            return error_response(message=str(ve), status_code=422)
+        except Exception as e:
+            return error_response(message=f"Extraction failed: {str(e)}", status_code=500)
+
+    @staticmethod
+    def import_resume():
+        from flask import request
+        user_id = get_jwt_identity()
+
+        # Check if client submitted confirmed JSON content from review modal
+        if request.is_json:
+            body = request.get_json() or {}
+            confirmed_content = body.get("confirmed_content")
+            title = body.get("title", "")
+            if not confirmed_content or not isinstance(confirmed_content, dict):
+                return error_response(message="Invalid or missing confirmed_content", status_code=400)
+
+            resume, err = ResumeService.import_from_document(
+                user_id=user_id,
+                confirmed_content=confirmed_content,
+                custom_title=title,
+            )
+            if err:
+                return error_response(message=err, status_code=400)
+            return success_response(
+                data=resume,
+                message="Resume created from extracted data",
+                status_code=201,
+            )
+
+        # Otherwise, process file upload directly
+        if "file" not in request.files:
+            return error_response(message="No file part in upload request", status_code=400)
+
+        file = request.files["file"]
+        if not file or file.filename == "":
+            return error_response(message="No file selected for import", status_code=400)
+
+        filename = file.filename
+        allowed_extensions = {".pdf", ".docx", ".doc"}
+        ext = "." + filename.rsplit(".", 1)[-1].lower() if "." in filename else ""
+        if ext not in allowed_extensions:
+            return error_response(
+                message=f"Unsupported file format '{ext}'. Allowed formats: PDF (.pdf), Word Document (.docx), and Word (.doc)",
+                status_code=400,
+            )
+
+        file_bytes = file.read()
+        if len(file_bytes) == 0:
+            return error_response(message="The uploaded file is empty", status_code=400)
+
+        if len(file_bytes) > 10 * 1024 * 1024:
+            return error_response(message="File size exceeds maximum allowed 10MB limit", status_code=400)
+
+        try:
+            resume, err = ResumeService.import_from_document(user_id, file_bytes, filename)
             if err:
                 return error_response(message=err, status_code=400)
             return success_response(

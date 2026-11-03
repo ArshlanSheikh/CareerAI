@@ -71,6 +71,24 @@ export default function SkillsEditor({ list = [], onChange, onTriggerAi }) {
         )}
       </div>
 
+      <div style={{
+        marginBottom: '1rem',
+        padding: '0.65rem 0.9rem',
+        borderRadius: 'var(--radius-lg)',
+        background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%)',
+        border: '1px solid rgba(99, 102, 241, 0.15)',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.5rem',
+        fontSize: '0.785rem',
+        color: 'var(--slate-700)',
+      }}>
+        <Sparkles size={15} color="var(--primary-600)" style={{ flexShrink: 0 }} />
+        <div>
+          <strong>ATS Keyword Tip:</strong> Group skills by category (e.g. Languages, Frameworks, Developer Tools, Databases) so ATS parsers can categorize your stack accurately.
+        </div>
+      </div>
+
       {/* Add New Category Row */}
       <div className={s.quickAddRow} style={{ marginBottom: '1.5rem', maxWidth: '480px' }}>
         <Input

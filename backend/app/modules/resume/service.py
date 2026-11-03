@@ -219,25 +219,55 @@ class ResumeService:
         return True, None
 
     @staticmethod
-    def import_from_pdf(user_id: str, file_bytes: bytes, filename: str):
-        from app.pdf.extraction import PdfExtractor
+    def extract_preview(user_id: str, file_bytes: bytes, filename: str):
+        from app.pdf.document_extractor import DocumentExtractor
         from app.ai.ai_service import AiService
 
-        # 1. Extract raw text with PyMuPDF
-        raw_text = PdfExtractor.extract_text(file_bytes)
+        # 1. Extract raw text from multi-format document (PDF, DOCX, DOC)
+        raw_text = DocumentExtractor.extract_text(file_bytes, filename)
 
-        # 2. Parse into standardized structure with Gemini
+        # 2. Structure into standardized schema with Gemini
         ai_svc = AiService()
         parsed_content = ai_svc.parse_resume_from_text(raw_text)
+
+        # Candidate name and suggested title
+        candidate_name = parsed_content.get("personal_info", {}).get("full_name", "").strip()
+        base_name = filename.rsplit(".", 1)[0] if filename else "Imported Resume"
+        suggested_title = f"{candidate_name} Resume" if candidate_name else f"{base_name} Resume"
+
+        return {
+            "filename": filename,
+            "suggested_title": suggested_title,
+            "target_role": parsed_content.get("professional_summary", {}).get("target_role", ""),
+            "parsed_content": parsed_content,
+        }, None
+
+    @staticmethod
+    def import_from_document(user_id: str, file_bytes: bytes = None, filename: str = "", confirmed_content: dict = None, custom_title: str = ""):
+        from app.pdf.document_extractor import DocumentExtractor
+        from app.ai.ai_service import AiService
+
+        if confirmed_content:
+            parsed_content = confirmed_content
+        else:
+            # 1. Extract raw text from multi-format document
+            raw_text = DocumentExtractor.extract_text(file_bytes, filename)
+
+            # 2. Parse into standardized structure with Gemini
+            ai_svc = AiService()
+            parsed_content = ai_svc.parse_resume_from_text(raw_text)
 
         # 3. Create new resume document
         db = get_db()
         now = datetime.now(timezone.utc)
 
-        # Determine title from candidate name or filename
+        # Determine title
         candidate_name = parsed_content.get("personal_info", {}).get("full_name", "").strip()
         base_name = filename.rsplit(".", 1)[0] if filename else "Imported Resume"
-        if candidate_name:
+
+        if custom_title and custom_title.strip():
+            title = custom_title.strip()
+        elif candidate_name:
             title = f"{candidate_name} Resume (Imported)"
         else:
             title = f"{base_name} (Imported)"
@@ -260,6 +290,13 @@ class ResumeService:
         resume_doc["_id"] = result.inserted_id
 
         return serialize_doc(resume_doc), None
+
+    @staticmethod
+    def import_from_pdf(user_id: str, file_bytes: bytes, filename: str):
+        """
+        Backwards-compatible method delegating to import_from_document.
+        """
+        return ResumeService.import_from_document(user_id, file_bytes, filename)
 
     @staticmethod
     def generate_resume_pdf(user_id: str, resume_id: str):

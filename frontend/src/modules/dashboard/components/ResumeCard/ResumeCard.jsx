@@ -10,6 +10,7 @@ import {
   Edit2,
   Trash2,
   ExternalLink,
+  Sparkles,
 } from 'lucide-react';
 
 export default function ResumeCard({
@@ -52,6 +53,11 @@ export default function ResumeCard({
           <div className={styles.badgeRow}>
             <span className={styles.templateBadge}>{resume.template || 'Modern'}</span>
             <span className={styles.versionBadge}>v{resume.current_version || 1}</span>
+            {resume.ats_score ? (
+              <span className={styles.scoreBadge} title="AI ATS Compatibility Score">
+                <Sparkles size={11} /> {resume.ats_score}% ATS
+              </span>
+            ) : null}
             <span className={`${styles.statusBadge} ${resume.status === 'completed' ? styles.completed : styles.draft}`}>
               <span className={styles.statusDot} />
               {resume.status === 'completed' ? 'Completed' : 'Draft'}
@@ -78,6 +84,11 @@ export default function ResumeCard({
           <Link to={`/resumes/${resume.id}/edit`}>
             <Button variant="primary" size="sm">
               Edit
+            </Button>
+          </Link>
+          <Link to={`/resumes/${resume.id}/analysis`}>
+            <Button variant="outline" size="sm" icon={Sparkles} title="View AI Resume Analysis">
+              Analyze
             </Button>
           </Link>
           <Link to={`/resumes/${resume.id}/preview`}>

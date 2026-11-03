@@ -66,6 +66,24 @@ export default function SummaryEditor({ data = {}, onChange, onTriggerAi }) {
           className={s.textarea}
         />
       </div>
+
+      <div style={{
+        marginTop: '1rem',
+        padding: '0.75rem 1rem',
+        borderRadius: 'var(--radius-lg)',
+        background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.06) 0%, rgba(168, 85, 247, 0.06) 100%)',
+        border: '1px solid rgba(99, 102, 241, 0.15)',
+        display: 'flex',
+        alignItems: 'flex-start',
+        gap: '0.6rem',
+        fontSize: '0.8rem',
+        color: 'var(--slate-700)',
+      }}>
+        <Sparkles size={16} color="var(--primary-600)" style={{ flexShrink: 0, marginTop: '2px' }} />
+        <div>
+          <strong>ATS Keyword Tip:</strong> Tailor your summary to your target role by including 2 core technical competencies (e.g. "React & TypeScript") and stating your tangible project contributions.
+        </div>
+      </div>
     </div>
   );
 }
