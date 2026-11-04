@@ -25,7 +25,9 @@ class EnhancementController:
         user_id = get_jwt_identity()
         result, error = EnhancementService.get_latest_enhancement(user_id, resume_id)
         if error:
-            return error_response(error, status_code=404)
+            if "not found" in error.lower():
+                return success_response(data=None, message="No previous enhancement found")
+            return error_response(error, status_code=400)
         return success_response(result)
 
     @staticmethod

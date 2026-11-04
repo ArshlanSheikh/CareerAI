@@ -37,7 +37,9 @@ class AnalysisController:
         service = AnalysisService()
         analysis, err = service.get_latest_analysis_for_resume(user_id, resume_id)
         if err:
-            return error_response(message=err, status_code=404)
+            if "not found" in err.lower():
+                return success_response(data=None, message="No previous analysis found")
+            return error_response(message=err, status_code=400)
 
         return success_response(data=analysis, message="Latest analysis retrieved successfully")
 

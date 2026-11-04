@@ -51,8 +51,22 @@ export default function AiSuggestionModal({
       if (typeof suggestion.suggested_content === 'string') {
         setEditedText(suggestion.suggested_content);
       } else if (Array.isArray(suggestion.suggested_content)) {
-        // e.g. list of bullets
-        setEditedText(suggestion.suggested_content.join('\n'));
+        // Check if items are objects (like skills categories)
+        if (suggestion.suggested_content.some((it) => typeof it === 'object' && it !== null)) {
+          const formatted = suggestion.suggested_content
+            .map((cat) => {
+              if (typeof cat === 'object' && cat !== null) {
+                const name = cat.category || cat.title || 'Skills';
+                const items = cat.skills || cat.items || [];
+                return `${name}: ${Array.isArray(items) ? items.join(', ') : items}`;
+              }
+              return String(cat);
+            })
+            .join('\n');
+          setEditedText(formatted);
+        } else {
+          setEditedText(suggestion.suggested_content.map(String).join('\n'));
+        }
       } else if (typeof suggestion.suggested_content === 'object') {
         // e.g. project object with description and personally_implemented_features
         if (suggestion.suggested_content.personally_implemented_features) {
@@ -80,10 +94,40 @@ export default function AiSuggestionModal({
         if (typeof suggestion.suggested_content === 'string') {
           contentToApply = editedText;
         } else if (Array.isArray(suggestion.suggested_content)) {
-          contentToApply = editedText
-            .split('\n')
-            .map((s) => s.trim())
-            .filter(Boolean);
+          const isSkills =
+            suggestion.section === 'skills' ||
+            sectionName?.toLowerCase().includes('skill') ||
+            suggestion.suggested_content.some((it) => typeof it === 'object' && it?.skills);
+
+          if (isSkills) {
+            contentToApply = editedText
+              .split('\n')
+              .map((line) => line.trim())
+              .filter(Boolean)
+              .map((line) => {
+                const parts = line.split(':');
+                if (parts.length > 1) {
+                  const category = parts[0].trim();
+                  const skills = parts[1]
+                    .split(',')
+                    .map((s) => s.trim())
+                    .filter(Boolean);
+                  return { category, skills };
+                }
+                return {
+                  category: 'Technical Skills',
+                  skills: line
+                    .split(',')
+                    .map((s) => s.trim())
+                    .filter(Boolean),
+                };
+              });
+          } else {
+            contentToApply = editedText
+              .split('\n')
+              .map((s) => s.trim())
+              .filter(Boolean);
+          }
         } else if (typeof suggestion.suggested_content === 'object') {
           const parsedBullets = editedText
             .split('\n')
@@ -145,9 +189,20 @@ export default function AiSuggestionModal({
       }
       return (
         <ul className={styles.bulletsList}>
-          {originalContent.map((bullet, idx) => (
-            <li key={idx}>{bullet}</li>
-          ))}
+          {originalContent.map((bullet, idx) => {
+            if (typeof bullet === 'object' && bullet !== null) {
+              const catName = bullet.category || bullet.title || bullet.name || '';
+              const skillsList = bullet.items || bullet.skills || [];
+              const text = Array.isArray(skillsList) ? skillsList.join(', ') : '';
+              return (
+                <li key={idx}>
+                  {catName && <strong>{catName}: </strong>}
+                  {text || bullet.description || JSON.stringify(bullet)}
+                </li>
+              );
+            }
+            return <li key={idx}>{String(bullet)}</li>;
+          })}
         </ul>
       );
     }
@@ -158,7 +213,7 @@ export default function AiSuggestionModal({
           {Array.isArray(originalContent.personally_implemented_features) && (
             <ul className={styles.bulletsList}>
               {originalContent.personally_implemented_features.map((b, idx) => (
-                <li key={idx}>{b}</li>
+                <li key={idx}>{typeof b === 'object' ? JSON.stringify(b) : String(b)}</li>
               ))}
             </ul>
           )}
@@ -188,10 +243,54 @@ export default function AiSuggestionModal({
     }
 
     if (Array.isArray(suggestion.suggested_content)) {
+      const hasObjects = suggestion.suggested_content.some(
+        (it) => typeof it === 'object' && it !== null
+      );
+
+      if (hasObjects) {
+        return (
+          <div className={styles.skillsSuggestionList}>
+            {suggestion.suggested_content.map((item, idx) => {
+              if (typeof item === 'object' && item !== null) {
+                const category = item.category || item.name || 'Suggested Skills';
+                const skills = item.skills || item.items || [];
+                const reason = item.reason || item.description || '';
+                return (
+                  <div key={idx} className={styles.skillCategoryBlock}>
+                    <div className={styles.skillCategoryHead}>
+                      <span className={styles.skillCategoryName}>{category}</span>
+                      {reason && <span className={styles.skillReasonText}>{reason}</span>}
+                    </div>
+                    <div className={styles.skillChipsWrap}>
+                      {Array.isArray(skills) ? (
+                         skills.map((sk, sIdx) => (
+                           <span key={sIdx} className={styles.skillChip}>
+                             {typeof sk === 'object' ? JSON.stringify(sk) : String(sk)}
+                           </span>
+                         ))
+                       ) : (
+                         <span>{String(skills)}</span>
+                       )}
+                    </div>
+                  </div>
+                );
+              }
+              return (
+                <div key={idx} className={styles.plainSkillLine}>
+                  {String(item)}
+                </div>
+              );
+            })}
+          </div>
+        );
+      }
+
       return (
         <ul className={styles.bulletsList}>
           {suggestion.suggested_content.map((bullet, idx) => (
-            <li key={idx}>{bullet}</li>
+            <li key={idx}>
+              {typeof bullet === 'object' ? JSON.stringify(bullet) : String(bullet)}
+            </li>
           ))}
         </ul>
       );
@@ -208,7 +307,9 @@ export default function AiSuggestionModal({
           {Array.isArray(suggestion.suggested_content.personally_implemented_features) && (
             <ul className={styles.bulletsList}>
               {suggestion.suggested_content.personally_implemented_features.map((b, idx) => (
-                <li key={idx}>{b}</li>
+                <li key={idx}>
+                  {typeof b === 'object' ? JSON.stringify(b) : String(b)}
+                </li>
               ))}
             </ul>
           )}
